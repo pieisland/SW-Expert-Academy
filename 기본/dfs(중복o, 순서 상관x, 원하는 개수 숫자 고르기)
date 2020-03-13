@@ -1,0 +1,94 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+using namespace std;
+
+/*
+200314
+dfs(중복o, 순서 상관x, 원하는 개수 숫자 고르기)
+중복처리는 벡터를 사용하는 게 나을 것 같다.
+배열에 1과 0으로 처리하니까 제대로 결과가 안나와서 골머리 좀 앓았음.
+*/
+
+int sel[6];
+vector<int> select;
+
+//벡터를 사용하는 방법.
+void dfs(int start, int cnt, int total, int wantedSel) {
+	if (cnt == wantedSel) {
+		cout << wantedSel << "개를 선택했어요." << endl;
+		for (int i = 0; i < wantedSel; i++) {
+			cout << select[i] << " ";
+		}
+		cout << endl;
+
+		return;
+	}
+
+	if (start >= total) {
+		return;
+	}
+
+	for (int i = start; i < total; i++) {
+		select.push_back(i);
+		dfs(i, cnt + 1, total, wantedSel);
+		select.pop_back();
+	}
+}
+
+//sel을 사용하는 방법. 그냥 1줬다가 0주면 동일한 값에 대해 처리하는 부분도 있기 때문에
+//이전에 저장해뒀던 게 없어진다. 그래서 중복을 처리하기 위해서는 1을 더하고 빼는 식으로 해야한다.
+void dfs2(int start, int cnt, int total, int wantedSel) {
+	if (cnt == wantedSel) {
+		cout << wantedSel << "개를 선택했어요." << endl;
+		for (int i = 0; i < total; i++) {
+			cout << sel[i] << " ";
+		}
+		cout << endl;
+
+		return;
+	}
+
+	if (start >= total) {
+		return;
+	}
+
+	for (int i = start; i < total; i++) {
+		sel[i] += 1;
+		dfs2(i, cnt + 1, total, wantedSel);
+		sel[i] -= 1;
+		
+		//if (sel[i] == 1) {
+		//	//sel[i] += 1;
+		//	dfs2(i, cnt + 1, total, wantedSel);
+		//}
+		//else
+		//{
+		//	sel[i] = 1;
+		//	dfs2(i, cnt + 1, total, wantedSel);
+		//	sel[i] = 0;
+		//}
+	}
+
+}
+
+int main(void){
+
+	int n = 6;
+	int wantedSel = 2;
+	int selarr[6] = {0,};
+	
+	printf("1. 벡터 사용하기.\n");
+	dfs(0, 0, n, wantedSel);
+
+	printf("\n\n");
+
+	printf("2. 배열 사용하기.\n");
+	dfs2(0, 0, n, wantedSel);
+
+	return 0;
+}
