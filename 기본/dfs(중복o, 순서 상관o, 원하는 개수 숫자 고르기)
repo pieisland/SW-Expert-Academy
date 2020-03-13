@@ -1,0 +1,48 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+using namespace std;
+
+/*
+200314
+dfs(중복o, 순서 상관o, 원하는 개수 숫자 고르기)
+앞에 풀었던 dfs(중복x, 순서 상관o, 원하는 개수 숫자 고르기) 에서 sel만 없으면 된다.
+sel 자체가 중복을 피하는 목적으로 사용하는 배열이기 때문에
+없애면 끝!
+*/
+
+//int sel[6];
+vector<int> number;
+
+void dfs2(int cnt, int n, int wantedSel) {
+	if (cnt == wantedSel) {
+		for (int i = 0; i < wantedSel; i++) {
+			cout << number[i] << " ";
+		}
+		cout << endl;
+		return;
+	}
+
+	for (int i = 0; i < n; i++) {
+		//if (sel[i]) continue;
+		//sel[i] = 1;
+		number.push_back(i);
+		dfs2(cnt + 1, n, wantedSel);
+		number.pop_back();
+		//sel[i] = 0;
+	}
+	return;
+}
+
+int main(void){
+
+	int n = 6;
+	int wantedSel = 2;
+	dfs2( 0, n, wantedSel);
+
+	return 0;
+}
