@@ -1,0 +1,103 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+using namespace std;
+
+/*
+200314
+얼마나 문제를 안푼지 오래됐으면.. 진짜 안풀렸다. 화날 정도였음.
+dfs 개념은 항상 빠르게 정말, 빠르게 까먹는 것 같다.
+그래서 오랜만에 풀 때는 기본부터 보는 게 필요한 듯.
+쉬운 문제였는데, 너무 오래 풀었다~
+
+여기서 핵심은, 선택해야 하는 개수를 정해주지 않아서
+dfs를 for문으로 돌면서 개수를 정해준 점 인 것 같다.
+
+내가 시간이 많이 걸렸던 부분 중 하나는..
+선택한 애, 안한 애를 구분함에 있어서
+벡터에 넣었다가 빼는 걸로. 그 하나로 된다는 점.
+제발 좀 기억하도록 하자. 지금 개념이 너무 뒤죽박죽이라
+돌고 돌고~
+*/
+
+int tc;
+int n;
+int answer;
+
+int sel[6];
+
+void dfs(int start, vector<int> select, vector<string> words, int wantedCnt) {
+	
+	//마지막 종료조건.
+	if (wantedCnt == select.size()) {
+		//확인을 하는 김으로 해서..
+		int alphabet[26] = { 0, }; //전역 변수 아니라도 0으로 초기화 되나ㅏ?
+		
+		//cout << "선택된 애:";
+		for (int i = 0; i < select.size(); i++) {
+			int idx = select[i];
+			//alphabets[idx]; //어떤..문자가 나옵니다.
+
+			//이게 뭐냐면.. 하나하나 글자에 대해서 하는 겁니다.
+			for (int j = 0; j < words[idx].length(); j++) {
+				int alpha = words[idx][j] - 'a';
+				alphabet[alpha] += 1;
+			}
+			//cout << idx << " ";
+		}
+		//cout << endl;
+		//모든 거에 대해서 했다면.. 하나라도 없으면 안된단 말이야.
+		for (int k = 0; k < 26; k++) {
+			if (alphabet[k] == 0) {
+				//cout << "삐빅. 단어가 하나라도 없네요." << endl;
+				return;
+			}
+		}
+		answer += 1;
+		//cout << endl;
+
+		//일단 지금은 그냥.. 하고싶어가지구 ^0^
+		return;
+	}
+
+	if (start == n) return;
+
+	for (int i = start; i < n; i++) {
+		vector<int> newSelect = select;
+		newSelect.push_back(i);
+		dfs(i + 1, newSelect, words, wantedCnt);
+		newSelect.pop_back();
+	}
+}
+
+int main(void){
+
+	scanf("%d", &tc);
+	for (int k = 1; k <= tc; k++) {
+		answer = 0;
+		scanf("%d", &n);
+		//n개의 단어를 담는 벡터.
+		vector<string> words;
+		for (int i = 0; i < n; i++) {
+			string s;
+			cin >> s;
+			words.push_back(s);
+		}
+
+		//이거에 대해서 dfs를 돌리겠습니다.
+		vector<int> select;
+		
+		for (int i = 1; i <= n; i++) {
+			dfs(0, select, words, i);
+		}
+
+		//정답 출력
+		printf("#%d %d\n", k, answer);
+	}
+  
+	return 0;
+}
