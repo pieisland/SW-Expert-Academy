@@ -1,0 +1,38 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+using namespace std;
+
+/*
+200314
+9317. 석찬이의 받아쓰기
+쉬운 문제이고, 그냥 기억할 건
+문자 - 문자 가 int형으로 나온다는 사실.
+*/
+
+int main(void){
+	int tc;
+	scanf("%d", &tc);
+	for (int i = 0; i < tc; i++) {
+		int n;
+		scanf("%d", &n);
+		string s[2];
+		for (int j = 0; j < 2; j++) {
+			cin >> s[j];
+		}
+
+		int ans = 0;
+		for (int k = 0; k < n; k++) {
+			if (s[0][k] - s[1][k] == 0) {
+				ans++;
+			}
+		}
+		printf("#%d %d\n", i + 1, ans);
+	}
+
+	return 0;
+}
