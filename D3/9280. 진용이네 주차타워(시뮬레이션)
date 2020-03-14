@@ -1,0 +1,116 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+using namespace std;
+
+/*
+200314
+9280. 진용이네 주차타워(시뮬레이션)
+재미있게 풀었던 시뮬레이션 문제.
+queue를 사용해야 된다는 걸 이해하고 넘어가자.
+그리고 리팩토링 해보면 좋을듯. 중복 함수.
+*/
+
+int main(void){
+	int tc;
+	scanf("%d", &tc);
+	
+	for (int t = 1; t <= tc; t++) {
+
+		int n, m;//n: 주차 공간의 수 / m: 차량의 수
+		int parkingPay[101] = { 0, };
+		int carsWeight[2001] = { 0, };
+		int answer = 0;
+
+		//주차공간이 비어있는지를 확인하는 변수.
+		int parkingEmpty[101] = { 0, };
+		queue<int> waitingCars;
+
+		scanf("%d %d", &n, &m);
+
+		//주차 공간의 단위 무게당 요금을 저장한다.
+		for (int i = 1; i <= n; i++) {
+			scanf("%d", &parkingPay[i]);
+		}
+		//차량의 무게를 저장한다.
+		for (int i = 1; i <= m; i++) {
+			scanf("%d", &carsWeight[i]);
+		}
+
+		//m개의 차량에 대해서 주차를 하고 나감의 정보가 주어진다.
+		for (int i = 1; i <= 2*m; i++) {
+			int state;
+			scanf("%d", &state);
+			if (state > 0) { //차량이 들어간다.
+				int carNumber = state;
+
+				//들어갈 수 있는 공간을 찾는다.
+				bool parked = false;
+				for (int j = 1; j <= n; j++) {
+					//주차를 할 수 있다면 
+					if (parkingEmpty[j] == 0) {
+						
+						parkingEmpty[j] = carNumber;//주차 했습니다.
+						parked = true;
+
+						//요금을 계산합니다.
+						answer += parkingPay[j] * carsWeight[carNumber];
+
+						break; //제일 처음 번째에 들어가고 끝.
+					}
+				}
+
+				//공간이 없어서 못들어갔어요.
+				if (parked == false) {
+					//대기할 수 있도록 한다. 차량 번호를 등록한다.
+					waitingCars.push(carNumber);
+				}
+			}
+			else { //차량이 나간다.
+				int carNumber = -state;
+				//n개의 공간 중에서 해당 자동차가 있었던 공간을 비워줍니다.
+				for (int j = 1; j <= n; j++) {
+					//다시 주차할 수 있도록 해줍니다.
+					if (parkingEmpty[j] == carNumber)
+						parkingEmpty[j] = 0;
+				}
+
+				//기다리고 있는 자동차 중에서 들어갈 수 있으면 주차를 해주자.
+				for (int k = 0; k < waitingCars.size(); k++) {
+					//그거를 함수로.. 지정을 하는 게 좋겠어요.
+					int carNumber = waitingCars.front();
+					
+					//주차하자.
+					//사실 이 부분이 동일한 부분이라 함수로 구현하는 게 좋을 것 같다는 생각이 든다.
+					bool parked = false;
+					for (int j = 1; j <= n; j++) {
+						//주차를 할 수 있다면 
+						if (parkingEmpty[j] == 0) {
+
+							parkingEmpty[j] = carNumber;//주차 했습니다.
+							parked = true;
+
+							//요금을 계산합니다.
+							answer += parkingPay[j] * carsWeight[carNumber];
+
+							break; //제일 처음 번째에 들어가고 끝.
+						}
+					}
+
+					//주차를 했을 때만 pop을 해야된다. 기다리고 있다고 해서 무조건 주차가 가능한 건 아니기 때문.
+					if(parked)
+						waitingCars.pop();
+				}
+			}
+		}
+
+		printf("#%d %d\n", t, answer);
+		//정답 출력
+	}
+
+	return 0;
+}
