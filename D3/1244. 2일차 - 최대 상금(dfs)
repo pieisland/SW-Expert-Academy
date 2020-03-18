@@ -1,0 +1,61 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+
+using namespace std;
+
+int n, result;
+string num;
+
+//1244. 2일차 - 최대 상금
+//https://swjeong.tistory.com/133
+//이분 코드랑 같다고 보면 됨.. ㅇㅇ. 많이 배워갑니다.
+
+//문자열을 엄청 간단하게 처리했다. 배열로 생각하고 바꿔주면 되는거였네..
+//마지막에 숫자로만 바꿔주면 되고; stoi는 string to int 로 알고있음.
+
+//2개 고르는 건 간단하게 for문 2중으로 돌려서 중복 안되게 골랐네요..
+//그 상태에서 swap을 이미 했으니까 누구를 골랐는지를 저장할 필요도 없고.
+//내가 했던 dfs1이 진짜 쓸모가 없었군.
+
+//pos를 그대로 넘겨주기 때문에 인덱스 넘어갈 일도 없고.
+//이게 0부터 하는 게 아니라 pos를 넘겨서 그것부터 해도 되는 이유는 중복되니까 그렇겠지?
+//1에서 12 13 14 15 이렇게 할건데. 한번은 1 하고 12 24 이렇게 할 수도 있고.
+//21이나 12 나 똑같은거고
+//2에서는 23 24 25 이렇게 할거고..23 34 할 수도 있고.
+//말이 이상하긴 하다만 대충 이해.
+void dfs(int pos, int cnt) {
+	if (cnt == n) {
+		result = max(result, stoi(num));
+		return;
+	}
+
+	//pos를 넣는 대신 0을 넣어보니 시간 엄청 걸림. 결국 충복을 제거해야되는거야.
+	for (int i = pos; i < num.size(); i++) {
+		for (int j = i + 1; j < num.size(); j++) {
+			if (num[i] <= num[j]) {
+				swap(num[i], num[j]);
+				dfs(i, cnt + 1);
+				swap(num[i], num[j]);
+			}
+		}
+	}
+}
+
+int main() {
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		cin >> num >> n;
+		result = 0;
+		dfs(0, 0);
+		cout << "#" << t << " " << result << "\n";
+	}
+
+	return 0;
+}
