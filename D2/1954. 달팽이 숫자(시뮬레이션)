@@ -1,0 +1,96 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+
+using namespace std;
+
+//10개가 최대라고 합니다.
+int arr[10][10];
+int n;
+
+int dir[4][2] = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} };
+
+int isinside(int y, int x) {
+	if (y >= 0 && y < n && x >= 0 && x < n) return 1;
+	else return 0;
+
+}
+
+void showArr() {
+	for (int i = 0; i <n ; i++) {
+		for (int j = 0; j < n; j++) {
+			cout << arr[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+
+//이게.. 1에서 값이 이상하게 되어서 문제가 생겼음.
+//..;;
+void initArr() {
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			arr[i][j] = 0;
+		}
+	}
+}
+
+
+int main() {
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		cin >> n;
+
+		int y = 0;
+		int x = 0;
+		int num = 1;
+		int idx = 0;
+
+		while (1) {
+
+			if (arr[y][x] != 0) break;
+
+			arr[y][x] = num++;
+			int ny = y + dir[idx][0];
+			int nx = x + dir[idx][1];
+
+			if (isinside(ny, nx))
+			{
+				//안 간곳이라면
+				if (arr[ny][nx] == 0) {
+					y = ny;
+					x = nx;
+				}
+				else //간 곳이면
+				{
+					idx = (idx + 1) % 4;
+					ny = y + dir[idx][0];
+					nx = x + dir[idx][1];
+					y = ny;
+					x = nx;
+				}
+			}
+			else //범위를 벗어난다면 방향을 틀어야 함.
+			{
+				idx = (idx + 1) % 4;
+				ny = y + dir[idx][0];
+				nx = x + dir[idx][1];
+				y = ny;
+				x = nx;
+			}
+		}
+
+		cout << "#" << t << endl;
+		showArr();
+		initArr();
+	}
+	
+
+	return 0;
+}
