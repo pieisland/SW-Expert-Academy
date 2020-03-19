@@ -1,0 +1,36 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+2071. 평균값 구하기
+그냥. 기본의 기본의 기본 문제.
+추천 문제에 떠서 없애려고 풀었다.
+반올림을 할 때는 0.5를 더한 다음에 int형으로
+형변환을 하면 되는구나.
+*/
+
+int main()
+{
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int num;
+		double sumVal= 0;
+		for (int i = 0; i < 10; i++) {
+			cin >> num;
+			sumVal += num;
+		}
+		int ans = (int)((sumVal / 10)+0.5);
+		printf("#%d %d\n", t, ans);
+		//cout << "#" << t << " " << ans << endl;
+	}
+
+	return 0;
+}
