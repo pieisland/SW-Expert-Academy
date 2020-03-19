@@ -1,0 +1,97 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+
+using namespace std;
+
+/*
+1928. Base64 Decoder
+이해하는 데 오래 걸린 문제.
+비트에 대해서 다시 공부하게 됐다.
+아스키코드도.
+배열을 인자로 받는 것도.
+*/
+
+//10진수를 2진수로 변환하는 함수.
+void makeBinary(int val, int arr[6]) {
+	int num = val;
+	int share;
+	int rest;
+	int idx = 5;
+
+	while (1) {
+		if (val == 0) break;
+
+		share = val / 2;//몫
+		rest = val % 2;//나머지
+
+		arr[idx] = rest;
+		idx--;
+		val = share;
+	}
+}
+
+int main() {
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		vector<int> bits;
+
+		string s;
+		cin >> s;
+		//문자열의 길이만큼.. 확인해봅니다.
+		for (int i = 0; i < s.size(); i++) {
+			int val;
+			//영어 대문자라면.
+			if (s[i] >= 'A' && s[i] <= 'Z') {
+				val = s[i] - 'A';
+			}
+			else if (s[i] >= 'a' && s[i] <= 'z') {
+				val = s[i] - 'a' + 26;
+			}
+			else if (s[i] >= '0' && s[i] <= '9') {
+				val = s[i] - '0' + 52;
+			}
+			else {//다른 문자다.
+				if (s[i] == '+') {
+					val = 62;
+				}
+				else { // /임을 의미
+					val = 63;
+				}
+			}
+
+			//val값을 2진수 6자리로 만들어 sixBit에 저장한다.
+			int sixBit[6] = { 0, };
+			makeBinary(val, sixBit);
+			/*for (int i = 0; i < 6; i++)
+				cout << sixBit[i] << " ";
+			cout << endl;*/
+
+			//마지막에 이 val을 2진수 6자리로 만들어
+			//벡터에 집어넣습니다.
+			for (int i = 0; i < 6; i++)
+				bits.push_back(sixBit[i]);
+		}
+
+		cout << "#" << t << " ";
+		for (int i = 0; i < bits.size()/8; i++) {
+			int tmp = 0;
+			//1byte씩 값으로 바꾼다.
+			for (int j = 0; j < 8; j++) {
+				int idx = i * 8 + j;
+				int realVal = bits[idx] * pow(2, 7 - j);
+				tmp += realVal;
+			}
+			printf("%c", tmp);
+		}
+		cout << endl;
+	}
+
+	return 0;
+}
