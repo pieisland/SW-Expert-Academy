@@ -1,0 +1,46 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+200319
+2056. 연월일 달력
+아.. 부분 문자열을 만들려고 할 때 substr를 쓰면 되는구나.
+char 더하기 char이 string이 되지는 않는다.
+그리고 뭔가 char을 int로 인식하는듯.
+string.substr(원하는 인덱스 위치, 몇 개까지 원하는지) 로 쓴다.
+*/
+
+
+//각 달에 대한 최대 일을 저장해둔다..
+int monthDay[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+int main()
+{
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		string s;
+		cin >> s;
+
+		string sYear = s.substr(0, 4);
+		string sMonth = s.substr(4, 2);
+		string sDay = s.substr(6, 2);
+
+		int month = stoi(sMonth);
+		int day = stoi(sDay);
+		if (day <= monthDay[month]) {
+			cout << "#"<<t<<" "<<sYear<<"/"<<sMonth<<"/"<<sDay << endl;
+		}
+		else
+			cout << "#" << t <<" "<<-1 << endl;
+	}
+
+	return 0;
+}
