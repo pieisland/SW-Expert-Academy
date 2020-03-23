@@ -1,0 +1,38 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+2020.03.23.월
+2070.
+그냥 손 풀기용.
+출력을 마지막에 한 번만 쓰려고 ch에 값을 저장했다.
+*/
+
+int main()
+{
+	int tc;
+	cin >> tc;
+	
+	int a, b;
+	char ch;
+	for (int t = 1; t <= tc; t++) {
+		cin >> a >> b;
+		if (a > b)
+			ch = '>';
+		else if (a < b)
+			ch = '<';
+		else
+			ch = '=';
+
+		printf("#%d %c\n", t, ch);
+	}
+
+	return 0;
+}
