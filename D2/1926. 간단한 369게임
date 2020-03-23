@@ -1,0 +1,42 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+1926. 간단한 369게임
+숫자 중에 3, 6, 9가 들어있으면 들어있는 개수만큼 - 출력하고
+아니면 숫자 출력하기.
+flag를 이용해서 3/6/9가 들어있거나 없거나를 기억하도록 했다.
+*/
+
+int main()
+{
+	int n;
+	cin >> n;
+	for (int num = 1; num <= n; num++) {
+		//숫자를 분해해서 봐야될 것 같은데..
+		//근데 그러면 또 그렇게 더럽게 해야되나..?
+		int flag = 0;
+		string samyukgoo;
+		string s = to_string(num);
+		for (int i = 0; i < s.size(); i++) {
+			if (s[i] == '3' || s[i] == '6' || s[i] == '9') {
+				flag = 1;
+				samyukgoo += '-';
+			}
+		}
+		if (flag) {
+			cout << samyukgoo << " ";
+		}
+		else
+			cout << num << " ";
+	}
+	
+	return 0;
+}
