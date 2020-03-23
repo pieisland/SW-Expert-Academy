@@ -1,0 +1,92 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+2805. 농작물 수확하기
+마름모 만들기가 관건.
+이 문제. 진짜로 별 찍기랑 엄청 비슷한 문제같은데.
+그거 조차 생각이 안나서 이상하게 vector로 다 담아서 풀었다.
+시간도 많이 걸리고.. 좀 슬픔.
+다른 사람들의 풀이를 확인하러 간다.
+*/
+
+int map[50][50];
+
+void clearMap() {
+	for (int i = 0; i < 50; i++)
+		for (int j = 0; j < 50; j++)
+			map[i][j] = 0;
+}
+
+int main()
+{
+	int tc;
+	cin >> tc;
+	for (int t = 1; t < tc + 1; t++) {
+		//농장의 크기.
+		int size;
+		cin >> size;
+
+		vector<int> cnt;
+		for (int i = 1; i <= size; i++) {
+			if (i % 2 != 0)
+				cnt.push_back(i);//홀수만 저장한다.
+		}
+		for (int i = size - 1; i >= 1; i--) {
+			if (i % 2 != 0)
+				cnt.push_back(i);//홀수만 저장한다.
+		}
+
+		//for (int i = 0; i < cnt.size(); i++)
+		//	cout << cnt[i] << " ";
+		//cout << endl;
+
+		vector<int> startIdx;
+		int startNum = size / 2 + 1;
+		for (int i = 0; i < size; i++) {
+			if (i <= size / 2) {
+				startNum--;
+				startIdx.push_back(startNum);
+			}
+			else
+			{
+				startNum++;
+				startIdx.push_back(startNum);
+			}
+		}
+
+		//for (int i = 0; i < startIdx.size(); i++)
+		//	cout << startIdx[i] << " ";
+		//cout << endl;
+
+		//농작물 가치를 저장한다.
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				int value;
+				scanf("%1d", &value);
+				map[i][j] = value;
+			}
+		}
+
+		int sum = 0;
+		for (int i = 0; i < size; i++) {
+			int colidx = startIdx[i];
+			for (int j = 0; j < cnt[i]; j++) {
+				sum+=map[i][colidx + j];
+			}
+		}
+
+		cout <<"#"<<t<<" "<< sum << endl;
+
+		clearMap();
+	}
+
+	return 0;
+}
