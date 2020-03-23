@@ -1,0 +1,36 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+2063. 중간값 찾기.
+벡터 정렬은 sort라는 stl을 사용해서 할 수 있다.
+처음과 마지막의 주소를 줘야되는 걸로 아는데.
+얼마나 안 쓴 지 오래됐으면 그것조차 까먹었다.
+
+중간값을 숫자들을 정렬한 후에 중간에 위치한 값을 의미한다.
+*/
+
+int main()
+{
+	int n;
+	cin >> n;
+	vector<int> nums;
+	int num;
+	for (int i = 0; i < n; i++) {
+		cin >> num;
+		nums.push_back(num);
+	}
+
+	sort(nums.begin(), nums.end());
+	int ansidx = n / 2;
+	cout << nums[ansidx] << endl;
+
+	return 0;
+}
