@@ -1,0 +1,74 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+200324
+1983. 조교의 성적 매기기
+아니. 분명 쉬운문제인데 시간이 엄~청 걸렸다.
+머리가 안돌아감을 정말.. 실감함.
+이건 진짜 다른사람들 풀이 봐야할 듯.
+
+정렬과 관련해서 sort함수에서 세 번째 인덱스에 대해 다시 공부하게 됐다.
+매개변수는 정렬하는 원소 하나에 대한거고
+return으로 뭘 앞으로 하길 원하는지 적어주면 된다.
+*/
+
+//정렬을 한 원소를 넣어줘야한느거구나..
+//내림차순 하기 위해서 이 함수를 만들어서 sort의 세번째 인자로 넣어줌.
+bool desc(pair<double, int> a, pair<double, int> b) {
+	return  a.first> b.first;
+}
+
+string grade[10] = { "A+", "A0", "A-", "B+", "B0", "B-",
+					 "C+", "C0", "C-", "D0" };
+
+int main()
+{
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n, k; //학생 수와 몇 번째 학생의 점수를 알고싶은지.
+		cin >> n >> k;
+
+		vector<pair<double, int>> totals;
+		for (int i = 0; i < n; i++) {
+			int midTest, finalTest, asmt;
+			cin >> midTest >> finalTest >> asmt;
+
+			//소수점 곱하기 때문에 double 타입을 썼다.
+			double totalScore = midTest * 0.35 + finalTest * 0.45 + asmt * 0.2;
+			totals.push_back({ totalScore, i });
+		}
+		
+		int sameGrade = n / 10;
+		//학점이 높은 순대로 정렬한다.
+		sort(totals.begin(), totals.end(), desc);
+		//for (int i = 0; i < totals.size(); i++)
+		//	cout << totals[i].first << " " << totals[i].second << endl;
+
+		int idx = 0;
+		for (int i = 0; i < 10; i++) {//10개의 학점을
+			for (int j = 0; j < sameGrade; j++) {//같은 수의 사람에게 부여함.
+				//k번째 학생은 인덱스로 보면 k-1번째이므로
+				//원하는 학생일 때 학점을 출력한다.
+				if (totals[idx].second == k - 1) {
+					cout <<"#"<<t<<" "<< grade[i] << endl;
+				}
+				idx++;
+
+				//원래는 찾고 나면 멈춰주면 좋겠지만.
+				//2중 for문이다 보니까 break 저기서 한다 해도 바깥 for문이 안먹어서
+				//flag같은 거 설정해야되는게 귀찮아서 안했다.
+			}
+		}
+	}
+
+	return 0;
+}
