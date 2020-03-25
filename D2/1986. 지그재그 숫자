@@ -1,0 +1,39 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+200325
+1986. 지그재그 숫자
+간단한 문제로 삼항연산자 연습해봤습니다.
+*/
+
+int main()
+{
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n;
+		int ans = 0;
+		cin >> n;
+
+		for (int i = 1; i <= n; i++) {
+			ans += i % 2 != 0 ? i : -i;
+			/*if (i % 2 != 0)
+				ans += i;
+			else
+				ans -= i;*/
+
+		}
+
+		cout << "#" << t << " " << ans << endl;
+	}
+
+	return 0;
+}
