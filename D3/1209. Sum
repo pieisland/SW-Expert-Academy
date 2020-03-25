@@ -1,0 +1,72 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+200325
+1209. Sum
+열심히 더하는 문제.
+*/
+
+int map[100][100];
+
+int main()
+{
+	for (int t = 1; t <= 10; t++) {
+		int tc;
+		cin >> tc;//아무 의미 없는데 일단 받아야 됨..ㅋㅋ
+
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 100; j++) {
+				cin >> map[i][j];
+			}
+		}
+
+		int ans = 0;
+		//행의 합
+		for (int i = 0; i < 100; i++) {
+			int sumVal = 0;
+			for (int j = 0; j < 100; j++) {
+				sumVal += map[i][j];
+			}
+			if (ans < sumVal)
+				ans = sumVal;
+		}
+
+		//열의 합
+		for (int j = 0; j < 100; j++) {
+			int sumVal = 0;
+			for (int i = 0; i < 100; i++) {
+				sumVal += map[i][j];
+			}
+			if (ans < sumVal)
+				ans = sumVal;
+		}
+
+		//왼쪽 위에서 오른쪽 아래로 가는 대각선
+		int sumVal = 0;
+		for (int i = 0; i < 100; i++) {
+			sumVal += map[i][i];
+		}
+		if (ans < sumVal)
+			ans = sumVal;
+
+		sumVal = 0;
+		for (int i = 99; i >= 0; i--) {
+			sumVal += map[i][i];
+		}
+		if (ans < sumVal)
+			ans = sumVal;
+
+		cout << "#" << t << " " << ans << endl;
+		//어차피 덮어쓰니까 초기화 할 필요 없죠.
+	}
+
+	return 0;
+}
