@@ -1,0 +1,99 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+/*
+200325
+1216. 회문2
+시간 초과함.
+*/
+
+char map[100][100];
+
+void showPal(vector<char> p) {
+	cout << "팰린드롬" << endl;
+	for (int i = 0; i < p.size(); i++)
+		cout << p[i] << " ";
+	cout << endl;
+}
+
+bool ispalindrome(vector<char> pal) {
+	
+	//showPal(pal);
+
+	int len = pal.size();
+	for (int i = 0; i < len / 2; i++) {
+		//한 번이라도 같지 않으면 palindrome이 아니다.
+		if (pal[i] != pal[len - 1 - i])
+			return false;
+	}
+	return true;
+}
+
+int main()
+{
+	for (int t = 1; t <= 10; t++) {
+		int tc;
+		cin >> tc;
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 100; j++) {
+				cin >> map[i][j];
+			}
+		}
+
+		//지금 테스트케이스의 정답이죠..
+		//아 근데 가로로도 보고 세로로도 봐야되는데용.
+		int ans = 0;
+		for (int len = 1; len <= 100; len++) {
+			//cout << "찾는 길이는 " << len << "입니다" << endl;
+			vector<char> pal;
+			int flag = 0;
+
+			//사실 길이만 찾는거라서 한번만 찾아도 된단말이야.
+			//그리고 점점 길이가 긴 순으로 찾기 때문에 굳이 비교를 할 필요도 없지.
+			for (int i = 0; i < 100; i++) {
+				if (flag) break;
+				for (int j = 0; j <= 100 - len; j++) {
+					for (int k = 0; k < len; k++) {
+						pal.push_back(map[i][j + k]);
+					}
+					if (ispalindrome(pal))
+					{
+						//cout << "팰린드롬이야" << endl;
+						flag = 1;
+						ans = len;
+					}
+					//여기서 clear를 했으니 아마 안해도 될거야.
+					pal.clear();
+				}
+			}
+			
+			flag = 0;
+			//세로도 여기서 볼까요?
+			for (int j = 0; j < 100; j++) {//열
+				if (flag) break;
+				for (int i = 0; i <= 100 - len; i++) {
+					for (int k = 0; k < len; k++)
+						pal.push_back(map[i+k][j]);
+					if (ispalindrome(pal))
+					{
+						//cout << "팰린드롬이야" << endl;
+						flag = 1;
+						ans = len;
+					}
+					pal.clear();
+				}
+				
+			}
+		}
+		
+		cout << "#" << t << " " << ans << endl;
+	}
+	return 0;
+}
