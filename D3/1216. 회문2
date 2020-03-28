@@ -1,0 +1,62 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+/*
+1216. 회문2
+배운 것.
+1. 회문검사는 따로 저장하지 않고 길이만 가지고 바로 할 수 있다.
+2. 마지막은 len-1
+3. 범위 검사는 for 안에서보다 if로 확인하는 게 더 편하다.
+
+저번에 시간초과나서 참 답답했던 문제.
+높은 정답률에 속상했던 문제.
+그래도 배워간다.
+*/
+
+char map[100][100];
+
+int garo(int y, int x, int len) {
+	if (x + len - 1 >= 100) return 0;
+	for (int i = 0; i < len / 2; i++) {
+		if (map[y][x + i] != map[y][x + len - 1 - i])
+			return 0;
+	}
+	return len;
+}
+
+int sero(int y, int x, int len) {
+	if (y + len - 1 >= 100) return 0;
+	for (int i = 0; i < len / 2; i++) {
+		if (map[y + i][x] != map[y+len-1-i][x])
+			return 0;
+	}
+	return len;
+}
+
+int main(void) {
+	for (int t = 1; t <= 10; t++) {
+		int tc;
+		cin >> tc;
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 100; j++) {
+				cin >> map[i][j];
+			}
+		}
+
+		int ans = 0;
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 100; j++) {
+				for (int k = 1; k <= 100; k++) {
+					int pal1 = garo(i, j, k);
+					int pal2 = sero(i, j, k);
+					int tmp = pal1 > pal2 ? pal1 : pal2;
+					if (tmp > ans) ans = tmp;
+				}
+			}
+		}
+
+		cout << "#"<<t << " " << ans << endl;
+	}
+}
