@@ -1,0 +1,92 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+/*
+2814. 최장 경로
+이떄까지 문제들은 다 최단 경로였는데 최장 경로라서 조금 어색했던 문제.
+경로의 길이를 정점의 개수로 정의를 해두어서 이것도 헷갈렸던 문제.
+생각보다 오래 안걸렸던 게 신기했고 바로 통과되어 뿌듯했다.
+
+알게된 점:
+1. 노드의 연결을 저장하기 위해 2차원 배열 사용하기.
+2. 노드의 방문 여부를 저장하기 위해 1차원 배열 사용하기.
+3. dfs를 이런식으로만 쓸 수도 있다.
+*/
+
+//1부터 쓰려고 11로 함.
+int edges[11][11];
+int visited[11];
+int ans;
+
+//모두 초기화.
+void init() {
+	for (int i = 0; i < 12; i++) {
+		for (int j = 0; j < 12; j++) {
+			edges[i][j] = 0;
+		}
+	}
+
+	for (int i = 0; i < 12; i++)
+		visited[i] = 0;
+
+	ans = 0;
+}
+
+void dfs(int myNode, int len, int n) {
+
+	//더이상 갈 곳이 없음을 확인하는 변수. 0 : 없음 / 1 : 있음
+	int ok = 0;
+
+	for (int i = 1; i <= n; i++) {
+		if (edges[myNode][i] == 1)
+		{
+			if (visited[i] != 1) {
+
+				visited[i] = 1;
+				dfs(i, len + 1, n);
+				visited[i] = 0;
+
+				ok = 1;
+			}
+		}
+	}
+
+	//더이상 갈 곳이 없다면 ans를 바꾼다.
+	if (ok == 0) {
+		if (ans < len)
+			ans = len;
+		return;
+	}
+}
+
+int main(void) {
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n, m;
+		cin >> n >> m;
+		for (int i = 0; i < m; i++) {
+			int a, b;
+			cin >> a >> b;
+
+			//정점이 연결되어있음.
+			edges[a][b] = 1;
+			edges[b][a] = 1;
+		}
+
+		//1번부터 n번까지의 애로 개수를 세보자
+		//근데 중복 있을 것 같은데 문제 없으려나..
+		for (int i = 1; i <= n; i++) {
+			visited[i] = 1;
+			dfs(i, 1, n);
+			visited[i] = 0;
+		}
+
+		cout << "#" << t << " " << ans << endl;
+		init();
+	}
+
+	return 0;
+}
