@@ -1,0 +1,69 @@
+#include<iostream>
+
+using namespace std;
+
+/*
+1493. 수의 새로운 연산
+y0이랑 y1이라는 함수가 내장이 되어있었다는게
+너무 충격적이다. 엄청 잘 쓰는 변수명인데.
+예전에는 썼던 것 같은데 뭘까.
+corectr_math.h 인가 뭔가에 있음;
+
+문제 자체는. 어렵지 않은데 그냥 귀찮음.
+*/
+
+//최대값 계산이 잘 안되서리 그냥 크게 함.
+int map[350][350];
+int x1;
+int x2;
+int y_1;
+int y2;
+
+//number는 x1인지 x2인지 선택하는거.
+void findvalue(int val, int number) {
+	for (int i = 1; i < 350; i++) {
+		for (int j = 0; j < 350; j++) {
+			if (map[i][j] == val) {
+				if (number == 1)
+				{
+					x1 = i;
+					y_1 = j;
+				}
+				else
+				{
+					x2 = i;
+					y2 = j;
+				}
+				return;
+			}
+		}
+	}
+}
+
+int main(void) {
+	int tc;
+	cin >> tc;
+
+	int num = 1;
+	for (int n = 1; n < 350; n++) {
+		for (int x = 1; x <= n; x++) {
+			int y = n + 1 - x;
+			map[x][y] = num;
+			num++;
+		}
+	}
+
+	for (int t = 1; t <= tc; t++) {
+		int p, q;
+		cin >> p >> q;
+
+		findvalue(p, 1);
+		findvalue(q, 2);
+
+		int nx = x1 + x2;
+		int ny = y_1 + y2;
+		cout << "#" << t << " " << map[nx][ny] << endl;
+	}
+
+	return 0;
+}
