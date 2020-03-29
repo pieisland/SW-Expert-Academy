@@ -1,0 +1,32 @@
+#include<iostream>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+/*
+1989. 초심자의 회문 검사
+200329
+회문은 이제 할 수 있죠.
+*/
+
+int main(void) {
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		string s;
+		cin >> s;
+		
+		int ans = 1;
+		int slen = s.size();
+		for (int i = 0; i < slen / 2; i++) {
+			if (s[i] != s[slen - 1 - i]) {
+				ans = 0;
+				break;
+			}
+		}
+		cout <<"#"<< t <<" "<< ans << endl;
+	}
+
+	return 0;
+}
