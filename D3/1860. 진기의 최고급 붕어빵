@@ -1,0 +1,68 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+/*
+1860. 진기의 최고급 붕어빵
+200330
+재밌게 푼 문제.
+뭔가 이런 유사한 문제들 봤던 것 같은데.
+벡터에 넣는 게 더 효율적이려나 싶음.
+*/
+
+//충분히 잡았다.
+int arrivalTime[11115];
+
+void initTime() {
+	for (int i = 0; i < 11115; i++)
+		arrivalTime[i] = 0;
+}
+
+int main(void) {
+	int tc;
+	cin >> tc;
+	//string ans;
+	for (int t = 1; t <= tc; t++) {
+
+		initTime();
+
+		int n, m, k;//n: 손님 명 수 , m: 만드는 시간 , k: 만든 수
+		cin >> n >> m >> k;
+
+		//붕어빵 개수
+		int snackCnt = 0;
+		int lastTime = 0;
+
+		//손님이 도착한 시간을 기록한다.
+		//오는 시간 순서로 주어지지 않아서 가장 큰 수를 찾기위해 비교해야 한다.
+		for (int i = 0; i < n; i++) {
+			int g;
+			cin >> g;
+			arrivalTime[g] = 1;
+			if (g > lastTime) lastTime = g;
+		}
+
+		int flag = 1;
+		//0초부터 손님이 오는 마지막 시간까지.
+		for (int i = 0; i <= lastTime; i++) {
+			if (i != 0 && i%m == 0)
+				snackCnt += k;//k개의 붕어빵을 만들었어요.
+			if (arrivalTime[i] == 1) {
+				//손님이 도착했는데.
+				snackCnt -= 1;
+				if (snackCnt < 0)
+				{
+					flag = 0;
+					cout << "#" << t << " " << "Impossible" << endl;
+					break;
+				}
+			}
+		}
+		
+		if(flag)
+			cout << "#" << t << " " << "Possible" << endl;
+	}
+
+	return 0;
+}
