@@ -1,0 +1,124 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+/*
+1974. 스도쿠 검증
+200330
+초기화때문에 조금 애먹었던 문제.
+그리고 3*3으로 검사할 때 나는 배열에 이렇게 넣어줬지만
+만약에 더 큰 크기를 검사해야한다면 다른 방식으로 해야할 듯.
+*/
+
+int map[9][9];
+int number[10];
+int pos[9][2] = { {0, 0}, {0, 3}, {0, 6},
+				  {3, 0}, {3, 3}, {3, 6},
+				  {6, 0}, {6, 3}, {6, 6} };
+
+void initMap() {
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			map[i][j] = 0;
+		}
+	}
+}
+
+void initNumber() {
+	for (int i = 0; i < 10; i++)
+		number[i] = 0;
+}
+
+bool checkRow() {
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			int num = map[i][j];
+			//cout << i <<" "<<j <<" num:"<< num<<" ";
+			if (number[num] == 1) {
+				//cout << "row" << endl;
+				return false;
+			}
+			number[num] = 1;
+		}
+		initNumber();
+	}
+	return true;
+}
+
+bool checkCol() {
+	for (int j = 0; j < 9; j++) {
+		for (int i = 0; i < 9; i++) {
+			int num = map[i][j];
+			//cout << i << " " << j << " num:" << num << " ";
+			if (number[num] == 1) {
+				//cout << "col" << endl;
+				return false;
+			}
+			number[num] = 1;
+		}
+		initNumber();
+	}
+	return true;
+}
+
+bool checkSmalls() {
+	for (int i = 0; i < 9; i++) {
+		int y = pos[i][0];
+		int x = pos[i][1];
+		for (int a = 0; a < 3; a++) {
+			for (int b = 0; b < 3; b++) {
+				int num = map[y + a][x + b];
+				//cout << y+a << " " << x+b << " num:" << num << " ";
+				if (number[num] == 1) {
+					//cout << "small" << endl;
+					return false;
+				}
+				number[num] = 1;
+			}
+		}
+		initNumber();
+	}
+
+	return true;
+}
+
+int main(void) {
+	
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+
+		initMap();
+		initNumber();
+
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				cin >> map[i][j];
+			}
+		}
+
+		bool ans;
+		ans = checkRow();
+		if (ans == false) {
+			cout << "#" << t << " " << 0 << endl;
+			continue;
+		}
+		initNumber();
+		ans = checkCol();
+		if (ans == false) {
+			cout << "#" << t << " " << 0 << endl;
+			continue;
+		}
+		initNumber();
+		ans = checkSmalls();
+		if (ans == false) {
+			cout << "#" << t << " " << 0 << endl;
+			continue;
+		}
+		cout << "#" << t << " " << 1 << endl;
+
+	}
+
+	return 0;
+}
