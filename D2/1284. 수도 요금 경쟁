@@ -1,0 +1,35 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+/*
+1284. 수도 요금 경쟁
+200330
+설명하는 대로 풀면 되는 문제.
+*/
+
+int main(void) {
+	
+	int tc;
+	cin >> tc;
+	int p, q, r, s, w;
+	int aBill;
+	int bBill;
+	for (int t = 1; t <= tc; t++) {
+		cin >> p >> q >> r >> s >> w;
+
+		aBill = p * w;
+		if (w <= r) {
+			bBill = q;
+		}
+		else
+			bBill = q + (w - r)*s;
+
+		int ans = aBill < bBill ? aBill : bBill;
+		cout << "#" << t << " " << ans << endl;
+
+	}
+
+	return 0;
+}
