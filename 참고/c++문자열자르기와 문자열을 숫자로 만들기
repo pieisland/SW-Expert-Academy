@@ -1,0 +1,42 @@
+[c++ 문자열 자르기. strtok 사용하기.]
+
+strtok를 사용하기 위해 cstinrg을 include 해줍니다.
+#include<cstring>
+
+string str_arr[1000]; //정답을 담으려는 배열입니다.
+int str_cnt=0;
+//vector<str> vec; //벡터로 담으려면 이걸 쓰세요.
+string a = "today is my day";
+char str_buff[[1000];
+strcpy(str_buff, a.c_str());
+
+char *tok = strtok(str_buff, " ");
+while(tok!=nullptr){
+	str_arr[str_cnt++] = string(tok);
+	//vec.push_back(string(tok)):
+	tok = strtok(nullptr, " ");
+}
+
+char * -> string: string(char * 값);
+ex)
+char *c ="hello bro";
+string(c);
+
+string -> char * : string 값.c_str();
+c_str()는 string의 첫번째 문자의 주소값(포인터)를 반환.
+ex)
+string s = "corona in bad";
+s.c_str();
+
+
+[문자열을 ]
+char * -> int: atoi
+ex)
+char * c = "2020";
+int num = atoi(c);
+
+string -> int : atoi(c_str());
+string s = "0401";
+int num = atoi(s.c_str());
+사실 stoi 쓰면 되는걸로 알고있긴 해요.
+int num = stoi(s);
