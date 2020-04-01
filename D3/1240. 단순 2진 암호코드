@@ -1,0 +1,115 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+1240. 단순 2진 암호코드
+200401
+문제를 이해하는 데 오래걸렸던 문제.
+그리고 어디서부터 확인해야되는지를 정하는 게 
+마지막 자리가 1이라서 그 위치를 잡고 56개의 수를 얻으면 되는거였다.
+인덱스때문에 헷갈림.
+
+숫자 나타내는 건 codenumber에 모두 저장을 해두고 비교했다.
+
+의외로 구현해야 되는 게 굉장히 많았던 문제.
+*/
+
+int map[50][100];
+int code[56];
+int codenumber[10][7] = 
+{ {0, 0, 0, 1, 1, 0, 1}, { 0, 0, 1, 1, 0, 0, 1 }, {0, 0, 1, 0, 0, 1, 1}, 
+{ 0, 1, 1, 1, 1, 0, 1 }, {0, 1, 0,0,0,1,1}, {0,1,1,0,0,0,1}, 
+{0,1,0,1,1,1,1},{0, 1, 1, 1, 0, 1, 1}, {0, 1, 1, 0, 1, 1, 1}, {0, 0, 0, 1, 0, 1, 1} };
+
+void initmap() {
+	for (int i = 0; i < 50; i++) {
+		for (int j = 0; j < 100; j++) {
+			map[i][j] = 0;
+		}
+	}
+}
+
+int whatismynum(int *arr) {
+	
+	for (int k = 0; k < 10; k++) {
+		int thisnumber = 1;
+		for (int i = 0; i < 7; i++) {
+			if (codenumber[k][i] != arr[i]){
+				thisnumber = 0;
+				break;
+			}
+		}
+		if (thisnumber == 1) {
+			return k;
+		}
+	}
+}
+
+
+int main(void) {
+	
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int ans = 0;
+		initmap();
+		int n, m;
+		cin >> n >> m;
+
+		int appear = 0;
+		int num;
+		int row = 0;
+		int lastOne = 0;
+
+		for (int i = 0; i < n; i++) {//세로
+			for (int j = 0; j < m; j++) {//가로
+				scanf("%1d", &map[i][j]);
+			}
+		}
+
+		for (int i = 0; i < n; i++) {//세로
+			for (int j = 0; j < m; j++) {//가로
+				//scanf("%1d", &map[i][j]);
+				if (map[i][j] == 1) {
+					appear = 1;
+					row = i; //그냥 i행만 기록해둘꼐요.
+					lastOne = j;
+				}
+			}
+			if (appear == 1) break;
+		}
+
+		int realNumber[8];
+		int idx = 0;
+		for (int i = lastOne - 56 + 1; i <= lastOne - 7 + 1; i = i + 7) {
+			int myArr[7];
+			for (int j = 0; j < 7; j++) {
+				//cout << map[row][i + j] << " ";
+				myArr[j] = map[row][i + j];
+			}
+			realNumber[idx++] = whatismynum(myArr);
+		}
+
+		int oddNumSum = 0;
+		int evenNumSum = 0;
+		for (int i = 0; i < 8; i++) {
+			if (i % 2 == 0) {//여기서는 홀수번째다.
+				oddNumSum += realNumber[i];
+			}
+			else
+			{
+				evenNumSum += realNumber[i];
+			}
+		}
+		if ((oddNumSum * 3 + evenNumSum) % 10 == 0) ans = oddNumSum + evenNumSum;
+		else ans = 0;
+
+		cout << "#" << t << " " << ans << endl;
+	}
+
+	return 0;
+}
