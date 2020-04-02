@@ -1,0 +1,57 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+1979. 어디에 단어가 들어갈 수 있을까
+200402
+마지막 처리를 잘 해줘야하는 문제였다.
+if else if가 아니라
+if if을 해야마지막 처리가 제대로 된다.
+*/
+
+int puzzle[15][15];
+
+int main(void) {
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n, k;
+		int ans = 0;
+		cin >> n >> k;
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++)
+				cin >> puzzle[i][j];
+
+		//가로 확인
+		for (int i = 0; i < n; i++) {
+			int wlen = 0;
+			for (int j = 0; j < n; j++) {
+				if (puzzle[i][j] == 1) wlen++;
+				if (puzzle[i][j] == 0 || j==n-1) {
+					if (wlen == k) ans++;
+					wlen = 0;
+				}
+			}
+		}
+
+		//세로 확인
+		for (int j = 0; j < n; j++) {
+			int wlen = 0;
+			for (int i = 0; i < n; i++) {
+				if (puzzle[i][j] == 1) wlen++;
+				if (puzzle[i][j] == 0 || i == n - 1) {
+					if (wlen == k) ans++;
+					wlen = 0;
+				}
+			}
+		}
+
+		cout << "#" << t << " " << ans << endl;
+	}
+
+	return 0;
+}
