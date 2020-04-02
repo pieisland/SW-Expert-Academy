@@ -1,0 +1,50 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+1970. 쉬운 거스름돈
+200402
+거스름돈 문제 1학년 때 풀었던 것 같음. c언어 처음 배울때.
+배열로 풀어봤다.
+*/
+
+int money[8] = { 50000, 10000, 5000, 1000, 500, 100, 50, 10 };
+int saveCnt[8];
+
+void initCnt() {
+	for (int i = 0; i < 8; i++)
+		saveCnt[i] = 0;
+}
+
+int main(void) {
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+	
+		int ans = 0;
+		int n;
+		cin >> n;
+		for (int i = 0; i < 8; i++) {
+			if (n / money[i] != 0) {
+				//ans += n / money[i];
+				saveCnt[i] = n / money[i];
+				n = n % money[i];
+			}
+		}
+
+		cout << "#" << t << endl;
+		for (int i = 0; i < 8; i++)
+			cout << saveCnt[i] << " ";
+		cout << endl;
+		initCnt();
+		//cout << "#" << t << " " << ans << endl;
+	}
+
+	return 0;
+}
