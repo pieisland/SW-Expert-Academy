@@ -1,0 +1,23 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+2050. 알파벳을 숫자로 변환
+200402
+조건이 너무 불명확한 문제임.
+*/
+
+int main(void) {
+	string s;
+	cin >> s;
+	for (int i = 0; i < s.length(); i++) {
+		int num = s[i] - 65 + 1;
+		cout << num << " ";
+	}
+
+	return 0;
+}
