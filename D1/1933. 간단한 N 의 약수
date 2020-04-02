@@ -1,0 +1,26 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+1933. 간단한 N 의 약수
+200402
+숫자가 작을 때야 약수를 그냥 풀면 되지만
+숫자가 엄청 커질 때 다르게 풀어야 하는 걸로 알고있음.
+그 이름 까먹음.. 무슨.. 뭐더라.ㅋ.ㅋㅋㅋ
+에라토스테네스의 체였나.
+*/
+
+int main(void) {
+	int n;
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		if (n%i == 0)
+			cout << i << " ";
+	}
+
+	return 0;
+}
