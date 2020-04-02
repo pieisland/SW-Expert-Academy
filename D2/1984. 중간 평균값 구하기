@@ -1,0 +1,44 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+1984. 중간 평균값 구하기
+200402
+반올림을 쉽게 하려면 0.5를 더한 후에 int형 형변환을 시킨다.
+int형 변수를 다룰 때 나누기 전에 먼서 형변환을 시키고 나눠야 한다. 
+int형은 그냥 잘라버리기 때문에 반올림이 안된다.
+*/
+
+int numbers[10];
+
+int main(void) {
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		int mysum = 0;
+		int maxval = 0;
+		int minval = 100000;
+		for (int i = 0; i < 10; i++) {
+			cin >> numbers[i];
+			if (numbers[i] > maxval) maxval = numbers[i];
+			if (numbers[i] < minval) minval = numbers[i];
+			mysum += numbers[i];
+		}
+
+		//다 더한 후에 제일 큰 값과 제일 작은 값을 빼준다.
+		mysum -= maxval;
+		mysum -= minval;
+
+		int ans = (int)(((double)mysum/8) + 0.5);
+
+		cout << "#" << t << " " << ans << endl;
+	}
+
+	return 0;
+}
