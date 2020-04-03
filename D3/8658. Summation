@@ -1,0 +1,47 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+200404
+8658. Summation
+자릿수의 숫자 다루는 문제. 고전 문제 중 하나다.
+10으로 나눈 몫과 나머지를 잘 다루면 되는 문제.
+맨 마지막자리수부터 구해나간다.
+*/
+
+int num[10];
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	//scanf("%d", &tc);
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int maxval = 0;
+		int minval = 100;
+		
+		for (int i = 0; i < 10; i++) {
+			cin >> num[i];
+			int val = 0;
+			while (num[i] != 0) {
+				int rest = num[i] % 10;
+				val += rest;
+				num[i] = num[i] / 10;
+			}
+			if (val > maxval) maxval = val;
+			if (val < minval) minval = val;
+		}
+
+		cout << "#" << t << " " << maxval << " " << minval << "\n";
+	}
+
+	return 0;
+}
