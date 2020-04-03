@@ -1,0 +1,104 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+8888. 시험
+200403
+아니, 시간초과는 그렇다치고 왜 한 문제도 안 맞는건데.. 시간초과 안되면 하나라도 맞아야되는 거 아니야?
+아예 1번부터 시간초과가 나는건가? 거지같넹..;
+*/
+
+int probGrade[2001];
+int solvingResult[2001][2001];
+int n, t_, p;
+
+//솔빙리저트는 어차피 새로 받으니까 안해도 된다고 생각했다.
+void initProbGrade() {
+	for (int i = 0; i <= 2000; i++)
+		probGrade[i] = 0;
+}
+
+void show() {
+	cout << "문제의 점수" << endl;
+	for (int i = 1; i <= t_; i++)
+		cout << probGrade[i] << " ";
+	cout << endl;
+}
+
+int main(void) {
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		initProbGrade();
+		
+		scanf("%d", &n); //n = getchar();//사람 수
+		scanf("%d", &t_);//t_ = getchar();//문제 수
+		scanf("%d", &p);//내 번호
+
+		int rank = 1;
+
+		for (int i = 1; i <= n; i++) {//모든 참가자
+			for (int j = 1; j <= t_; j++) {//문제 수 
+				scanf("%d", &solvingResult[i][j]);//solvingResult[i][j] = getchar();
+				if (solvingResult[i][j] == 0)//못 풀었다면
+				{
+					//못 푼 사람만큼 점수를 증가합니다.
+					probGrade[j] +=1 ;
+				}
+			}
+		}
+
+		/*for (int j = 1; j <= t_; j++) {//모든 문제에 대해
+			for (int i = 1; i <= n; i++) {//참가자들이 풀었는지
+				if (solvingResult[i][j] == 0)//못 풀었다면
+				{
+					//못 푼 사람만큼 점수를 증가합니다.
+					probGrade[j] +=1 ;
+				}
+			}
+		}*/
+
+		show();
+		
+		//내 점수를 먼저 구해두자.
+		int myGrade = 0;
+		int myAnsCnt = 0;
+		for (int j = 1; j <= t_; j++)
+		{
+			//내가 문제 풀었다면 개수 센다.
+			if (solvingResult[p][j] == 1) {
+				myAnsCnt++;
+				myGrade += probGrade[j];
+			}
+		}
+
+		for (int i = 1; i <= n; i++) {
+			if (i == p) continue;
+			int ansCnt = 0;
+			int grade = 0;
+			for (int j = 1; j <= t_; j++) {
+				if (solvingResult[i][j] == 1)
+					ansCnt++;
+				grade += solvingResult[i][j] * probGrade[j];
+			}
+
+			if (grade > myGrade)
+				rank++;
+			else if (grade == myGrade) {
+				if (ansCnt > myAnsCnt) rank++;
+				else if (ansCnt == myAnsCnt)
+				{
+					if (i < p)
+						rank++;
+				}
+			}
+		}
+
+		printf("#%d %d %d\n", t, myGrade, rank);
+	}
+	return 0;
+}
