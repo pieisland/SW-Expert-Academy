@@ -1,0 +1,39 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+200404
+8741. 두문자어
+저번에도 정리를 했었지만.
+소문자는 대문자는 65부터 소문자는 97부터.
+32 차이. 소문자가 더 크다.
+모르겠으면 출력한번만 해보면 알거다.
+*/
+
+char ans[3];
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	//scanf("%d", &tc);
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		for (int i = 0; i < 3; i++) {
+			string s;
+			cin >> s;
+			ans[i] = s[0] - 32;
+		}
+
+		cout << "#" << t << " " << ans[0] << ans[1] << ans[2] << '\n';
+	}
+
+	return 0;
+}
