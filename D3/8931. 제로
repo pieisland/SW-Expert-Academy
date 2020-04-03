@@ -1,0 +1,39 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+8931. 제로
+200403
+벡터를 사용해서 적절하게 push pop 하면 쉽게 풀리는 문제.
+*/
+
+int puzzle[15][15];
+
+int main(void) {
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int k;
+		cin >> k;
+		long long ans = 0;
+		vector<int> numbers;
+		for (int i = 0; i < k; i++) {
+			int num;
+			cin >> num;
+			if (num == 0) numbers.pop_back();
+			else
+				numbers.push_back(num);
+		}
+		for (int i = 0; i < numbers.size(); i++) {
+			ans += numbers[i];
+		}
+
+		cout << "#" << t << " " << ans << endl;
+
+	}
+	return 0;
+}
