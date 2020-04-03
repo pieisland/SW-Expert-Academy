@@ -1,0 +1,46 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+
+using namespace std;
+
+/*
+200404
+8840. 아바바바
+이 문제를 풀고 어떤 게 시간이 더 걸리는지를 알게됐다.
+굉장히 짜증나지만 적어보자면
+1. ans = (l-1)*(l-1)/4; 하고 ans 출력보다
+ans = (l-1)/2; 하고 ans*ans 출력이 더 빠르다. 도대체 왜임....
+2. endl은 엄청 느리니 \n을 써라.
+3. cin, cout을 쓰고싶을 때는 세 개를 쓰고 써라.
+ios_base::sync_with_stdio(0);
+cin.tie(0);
+cout.tie(0);
+
+솔직히 2, 3번이나 예전에 알고있던거긴 하지만
+대부분 문제에서 이런 더러운 게 나오지 않기 때문에 그냥 편하게
+cout, cin, endl 쓰면서 살았는데 여기서 또 그렇게 살지말라고
+이런 문제를 다 내주네.
+*/
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	//scanf("%d", &tc);
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		int l;
+		//scanf("%d", &l);
+		cin >> l;
+		long long ans = (l - 1)/2;
+		cout << "#" << t << " " << ans*ans << '\n';
+	}
+
+	return 0;
+}
