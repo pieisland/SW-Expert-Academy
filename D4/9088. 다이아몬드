@@ -1,0 +1,56 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+/*
+200404
+9088. 다이아몬드
+정렬을 해서 풀면 쉬운 문제.
+*/
+
+//다이아몬트 무게 담는다. 원래 배열로 하려다가 배열에는 빈 자리때문에 골치아파져서
+//벡터로 변경.
+vector<int> dia;
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n, k;
+		cin >> n >> k;
+		for (int i = 0; i < n; i++) {
+			int dweight;
+			cin >> dweight;
+			dia.push_back(dweight);
+		}
+
+		sort(dia.begin(), dia.end());
+
+		int ans = 0;
+		for (int i = 0; i < n; i++) {
+			int cnt = 1;
+			for (int j = i + 1; j < n; j++) {
+				if (dia[j] - dia[i] <= k) {
+					cnt++;
+				}
+				else
+					break;
+			}
+			if (ans < cnt) ans = cnt;
+		}
+
+		cout << "#" << t << " " << ans << '\n';
+		dia.clear();
+	}
+
+	return 0;
+}
