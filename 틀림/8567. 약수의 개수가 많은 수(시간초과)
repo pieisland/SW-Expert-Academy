@@ -1,0 +1,61 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+/*
+200404
+8567. 약수의 개수가 많은 수
+아니.. 
+https://mygumi.tistory.com/122
+약수를 구하는 거 자체야 당연히 쉽지.
+근데 그게 비효율적이니까 위에 링크 보고 만들었는데도
+시간초과가 나..
+얼마나 더 효율적인 방법이 있다는거야..
+
+D4 문제들은 뭔가..
+시간이 부족하거나
+dp거나
+규칙을 찾거나
+이런 게 많은 것 같다. 구현을 한다기 보다. 짜증남.
+*/
+
+int cnt[100000 + 1];
+
+void initcnt() {
+	for (int i = 1; i <= 100000; i++)
+		cnt[i] = 0;
+}
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+
+	for (int i = 1; i <= 100000; i++)
+		for (int j = 1; j <= 100000 / i; j++)
+			cnt[i*j]++;
+
+	for (int t = 1; t <= tc; t++) {
+		int n;
+		cin >> n;
+
+		int maxval = 0;
+		int ans = 0;
+		for (int i = 1; i <= n; i++)
+			if (cnt[i] >= maxval) {
+				maxval = cnt[i];
+				ans = i;
+			}
+		cout << "#" << t << " " << ans << '\n';
+	}
+
+	return 0;
+}
