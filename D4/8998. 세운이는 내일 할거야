@@ -1,0 +1,77 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+/*
+200404
+8998. 세운이는 내일 할거야
+가장 제출일이 늦은 순서로 정렬을 한 후에
+다시 시작할 날을 찾아가면 되는 문제.
+
+알게된 것.
+1. sort 함수 세 번째 인자 사용하는 방법
+2. 배열에 저장하지 않고 풀 수 있구나.
+처음에 생각을 할 때 내가 과제를 한다고 시간을 들인 날은
+배열에 1이라고 저장을 해서 건너뛰려고 했었는데
+10^9 크기의 배열을 만들 수 없어서 고민을 많이 했었음.
+그런데 좀 다르게 생각하니 마지막 위치만 찾으면 되는거라
+배열이 필요 없더라.
+
+풀어서 기분 굉장히 좋음.
+*/
+
+struct Assignment {
+	int needDay;
+	int endDay;
+} typedef Asmt;
+
+vector<Asmt> asmt;
+
+bool cmp(Asmt a, Asmt b) {
+	return a.endDay > b.endDay;
+}
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n;
+		cin >> n;
+		for (int i = 0; i < n; i++) {
+			int t, d;
+			cin >> t >> d;
+			Asmt tmp;
+			tmp.needDay = t;
+			tmp.endDay = d;
+			asmt.push_back(tmp);
+		}
+
+		//제출일이 늦은 순서대로 정렬.
+		sort(asmt.begin(), asmt.end(), cmp);
+
+		int endDay = asmt[0].endDay;
+		for (int i = 0; i < n; i++) {
+			//과제의 제출일보다 뒤에 있다면 과제의 제출일부터 시작.
+			if (endDay >= asmt[i].endDay)
+				endDay = asmt[i].endDay;
+
+			//과제를 하는 날을 빼서 다음 과제를 시작할
+			//시작 날짜를 정한다.
+			endDay -= asmt[i].needDay;
+		}
+
+		cout << "#" << t << " " << endDay << '\n';
+		asmt.clear();
+	}
+
+	return 0;
+}
