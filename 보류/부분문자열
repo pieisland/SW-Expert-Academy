@@ -1,0 +1,52 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+
+/*
+200414
+부분문자열 구하는 거라고 만들어놨더만 문제 잘못 읽어서
+이런 걸 구하는 게 아니었음.
+짜증나네..
+애초에 이게 최적화가 되는 것도 아니겠지만 모ㄹ겠다..
+*/
+
+string s;
+int d[10001];
+
+int check(int start) {
+	string t = "SAMSUNG";
+	for (int i = 0; i < 7; i++) {
+		if (t[i] != s[i + start]) return 0;
+	}
+	return 1;
+}
+
+int dp(int len) {
+	if (len < 7) return 0;
+	if (d[len] != -1) return d[len];
+	d[len] = dp(len - 1) + check(len - 6);
+	return d[len];
+}
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		cin >> s;
+		memset(d, -1, sizeof(d));
+		int ans = dp(s.length());
+		cout << '#' << t << ' ' << ans << '\n';
+	}
+
+	return 0;
+}
