@@ -1,0 +1,97 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+
+/*
+200414
+9282. 초콜릿과 건포도.
+출처: https://regularmember.tistory.com/182
+내가 푼 게 아니다.
+dp는 아직 나에겐 너무 어렵고 항상 감이 안 잡혀서 다른 사람이 푼 걸 보고 풀었다.
+배열인덱스를 좌표로 사용을 해서 푸는구나.
+
+이 문제를 풀면서 dp에 대해서 다시 생각할 수 있었고
+누적합에 대해서도 알게됐다.
+누적합을 안쓰면 합을 구할 때 복잡도가 많이 올라갈텐데
+누적합을 쓰면 이전에 구한 값을 사용해서 편하게 구할 수가 있구나.
+
+그리고 (y,x)부터 (ey, ex)까지에 있는 건포도의 합을 구할 때도
+전체에서 빼고 더하고 하는 식으로 구하니까 진짜 간편하게 구할 수 있었음.
+대학 다닐 때 수업시간에 배웠던 것 같은데 사용해 본 적이 없었는데
+이럴 때 쓰이는구나. 이제야 만났다.
+
+인덱스를 보면 헷갈리지만 그림만 조금 그려보면 바로 이해할 수 있다.
+
+..memset을 쓰려면 cstring을 써야한다.
+*/
+
+int dp[51][51][51][51];
+int choco[51][51];
+int sum[51][51];
+
+int solve(int y, int x, int ey, int ex) {
+	if (y == ey && x == ex) return 0;
+	if (dp[y][x][ey][ex] != -1) return dp[y][x][ey][ex];
+
+	//(y,x)에서 (ey, ex)까지의 초콜릿에 들어있는 건포도의 합. 
+	//자르기 전의 큰 조각이 이 한 조각이기 때문에 더해야함.
+	int cnt = sum[ey][ex] - sum[ey][x - 1] - sum[y - 1][ex] + sum[y - 1][x - 1];
+	//cout << cnt << endl;
+
+	//가장 큰 수를 주는 방식은 이렇게도 있다. 간편.
+	int rt = 987654321;
+
+	//가로로 잘랐을 때
+	//저렇게 작은 조각으로 나눈 애를 마지막 한 조각까지 나눴을 떄의 건포도의 최대 합을 더한거.
+	//거기다가 자르기 전의 내 건포도 합을 더해야 비로소 정답.
+	for (int i = y; i < ey; i++) {
+		int tmp = solve(y, x, i, ex) + solve(i + 1, x, ey, ex);
+		if (rt > tmp + cnt) rt = tmp + cnt;
+	}
+
+	//세로로 잘랐을 때
+	for (int i = x; i < ex; i++) {
+		int tmp = solve(y, x, ey, i) + solve(y, i + 1, ey, ex);
+		if (rt > tmp + cnt) rt = tmp + cnt;
+	}
+
+	//cout << rt << endl;
+
+	return dp[y][x][ey][ex] = rt;
+}
+
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	int n, m;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		
+		memset(dp, -1, sizeof(dp));
+		cin >> n >> m;
+
+		for (int i = 1; i <= n; i++)
+			for (int j = 1; j <= m; j++)
+				cin >> choco[i][j];
+
+		//누적합.
+		for (int i = 1; i <= n; i++)
+			for (int j = 1; j <= m; j++)
+				sum[i][j] = sum[i - 1][j] + sum[i][j - 1] - sum[i - 1][j - 1] + choco[i][j];
+
+		int ans = solve(1, 1, n, m);
+		cout << '#' << t << ' ' << ans << '\n';
+	}
+
+	return 0;
+}
