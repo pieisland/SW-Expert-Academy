@@ -1,0 +1,67 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+
+/*
+200414
+8673. 코딩 토너먼트
+대결을 계속 진행.
+재귀함수 연습하기 좋은 문제..?
+*/
+
+vector<int> vec(1024);
+
+int func(vector<int> v, int cnt) {
+
+	//최후의 1인
+	if (cnt == 1) return 0;
+	
+	//코딩 실력이 더 높은 사람 저장
+	//	int maxVal; 생각해보니 의미가 없음.
+	int ans = 0;
+	vector<int> v2;
+	for (int i = 0; i < cnt; i += 2) {
+		if (v[i] > v[i + 1]) {
+			//maxVal = v[i];
+			ans += v[i] - v[i + 1];
+			v2.push_back(v[i]);
+		}
+		else {
+			//maxVal = v[i + 1];
+			ans += v[i + 1] - v[i];
+			v2.push_back(v[i+1]);
+		}
+	}
+
+	//다음 경기
+	ans += func(v2, cnt / 2);
+	return ans;
+}
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int k;
+		cin >> k;
+		for (int i = 0; i < pow(2, k); i++) {
+			cin >> vec[i];//코딩실력 저장
+		}
+
+		int ans = func(vec, pow(2, k));
+
+		cout << '#' << t << ' ' << ans << '\n';
+	}
+
+	return 0;
+}
