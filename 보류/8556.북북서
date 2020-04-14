@@ -1,0 +1,80 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include <string>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+
+/*
+200414
+8556. 북북서
+별거 아닌데 안풀려서 화나는 문제. 결국 못품...
+아니 어쩌라구. ㅎ.ㅎ..
+*/
+
+int main(void) {
+	//이걸 쓰는 습관을 들여야겠다.
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		string s;
+		cin >> s;
+		int idx = 0;
+		vector<int> dir;
+		while (1) {
+			if (idx >= s.length()) break;
+			if (s[idx] == 'n') {
+				idx += 5;
+				dir.push_back(1);
+			}
+			else if (s[idx] == 'w') {
+				idx += 4;
+				dir.push_back(2);
+			}
+		}
+
+		int intVal = 0;
+		int cnt = 0;
+		int div;
+		for (int i = dir.size() - 1; i >= 0; i--) {
+			if (i == dir.size()-1) {
+				if (dir[i] == 1)
+					intVal = 0;
+				else
+					intVal = 90;
+			}
+			else {
+				if (dir[i] == 1) {
+					intVal = intVal * pow(2, cnt) - 90;
+				}
+				else if (dir[i] == 2) {
+					intVal = intVal * pow(2, cnt) + 90;
+				}
+			}
+			cnt++;
+		}
+
+		if (cnt >= 2) {
+			intVal = intVal / 2;
+			div = pow(2, cnt - 2);
+
+			if (div == 1)
+				cout << intVal << '\n';
+			else if (div != 1) {
+				cout << intVal << '/' << div << '\n';
+			}
+		}
+		else
+			cout << intVal << '\n';
+
+	//	cout << '#' << t << ' ' << ans << '\n';
+	}
+
+	return 0;
+}
