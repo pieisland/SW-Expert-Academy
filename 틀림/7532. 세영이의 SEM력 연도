@@ -1,0 +1,43 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+/*
+200418
+7532. 세영이의 SEM력 연도
+시간초과. 이렇게 하루씩 증가시키는 게 아니라
+점프할 수 있는 걸 생각해야 하는 문제.
+*/
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	int s, e, m;
+	for (int t = 1; t <= tc; t++) {
+		cin >> s >> e >> m;
+
+		int mys = 0;
+		int mye = 0;
+		int mym = 0;
+		int day = 1;
+		while (1) {
+			mys++;
+			mye++;
+			mym++;
+			if (mys == 366) mys = 1;
+			if (mye == 25) mye = 1;
+			if (mym == 30) mym = 1;
+			if (s == mys && e == mye && m == mym) break;
+			day++;
+		}
+		cout << '#' << t << " "<<day << endl;
+	}
+
+
+	return 0;
+}
