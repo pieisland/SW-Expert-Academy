@@ -1,0 +1,43 @@
+#include<iostream>
+#include<string>
+using namespace std;
+ 
+/*
+200418
+7532. 세영이의 SEM력 연도
+나는 시간초과났고 다른 사람이 푼 걸 보고 
+이해했다. 이해하는 데만도 많은 시간이 걸렸다.
+이걸.. 바로 풀어버리는 당신들은 도대체..
+s력이 주기가 가장 길어서 s력으로 jump 해서 연산을 줄인 듯.
+시작을 s로 주면 s+365는 어차피 s이기 때문에 365를 더해주는 거고
+그 값이 k일 때 e를 빼서 24로 나눈 게 0인 게 e력인 이유는
+k에서 e를 안뺴고 24로 나눴으면 나머지가 e니까 그런거겠지.
+하지만 너무 헷갈리는 건 사실이다.
+...코딩 머리는 어떻게 기르는거냐.
+*/
+ 
+int main(void) {
+ 
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+ 
+    int tc;
+    cin >> tc;
+    int s, e, m;
+    for (int t = 1; t <= tc; t++) {
+        cin >> s >> e >> m;
+ 
+        int day;
+        for (int k = s;; k += 365) {
+            if ((k - e) % 24 == 0 && (k - m) % 29 == 0) {
+                day = k;
+                break;
+            }
+        }
+ 
+        cout << '#' << t << " "<< day << endl;
+    }
+ 
+    return 0;
+}
