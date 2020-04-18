@@ -1,0 +1,63 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+/*
+200418
+7732. 시간 개념
+문자열 문제인데 다음날 만나는 게 있어서 시간 더해주는 거에 신경써야하는 문제.
+*/
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		string s[2];
+		int time[2][3];
+		for (int i = 0; i < 2; i++) {
+			cin >> s[i];
+
+			//시 분 초를 저장해줌.
+			time[i][0] = stoi(s[i].substr(0, 2));
+			time[i][1] = stoi(s[i].substr(3, 2));
+			time[i][2] = stoi(s[i].substr(6, 2));
+		}
+
+		//다음날 약속이면 24를 더해준 후에 계산한다.
+		if (time[0][0] > time[1][0])
+			time[1][0] += 24;
+		else if (time[0][0] == time[1][0] && time[0][1] > time[1][1])
+			time[1][0] += 24;
+		else if (time[0][0] == time[1][0] && time[0][1] == time[1][1] && time[0][2] > time[1][2])
+			time[1][0] += 24;
+
+		int myTime[3];
+		
+		for (int i = 2; i >= 0; i--) {
+			if (time[1][i] - time[0][i] < 0) {
+				time[1][i - 1] -= 1;
+				myTime[i] = time[1][i] - time[0][i] + 60;
+			}
+			else myTime[i] = time[1][i] - time[0][i];
+		}
+
+		string ans[3];
+		for (int i = 0; i < 3; i++) {
+			string tmp;
+			if (myTime[i] < 10) {
+				tmp = "0" + to_string(myTime[i]);
+			}
+			else tmp = to_string(myTime[i]);
+			ans[i] = tmp;
+		}
+		string answer = ans[0] + ":" + ans[1] + ":" + ans[2];
+		cout << '#' << t << " "<< answer << endl;
+	}
+
+	return 0;
+}
