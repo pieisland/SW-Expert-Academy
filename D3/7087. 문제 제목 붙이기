@@ -1,0 +1,56 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+/*
+200420
+7087. 문제 제목 붙이기
+그냥 가볍게 풀면 되는 문제.
+*/
+
+int alpha[26];
+
+int countTitle() {
+	int ret = 0;
+	
+	for (int i = 0; i < 26; i++) {
+		if (alpha[i] == 1) ret++;
+		if (alpha[i] == 0) break;
+	}
+	return ret;
+}
+
+void resetAlpha() {
+	for (int i = 0; i < 26; i++)
+		alpha[i] = 0;
+}
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int ans;
+		int n;
+		resetAlpha();
+
+		cin >> n;
+		for (int i = 0; i < n; i++) {
+			string s;
+			cin >> s;
+
+			alpha[s[0] - 'A'] = 1;
+		}
+	
+		ans = countTitle();
+
+		cout << "#" << t << " " << ans << '\n';
+	}
+
+
+	return 0;
+}
