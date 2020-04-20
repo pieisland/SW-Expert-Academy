@@ -1,0 +1,54 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+using namespace std;
+
+/*
+200420
+7193. 승현이의 수학공부
+아니.. 왜 하나도 안맞냐고... 
+자리수 더해서 n-1로 나누면 되는거 맞잖아 나쁜놈아 ㅠㅠㅠㅠ
+하... 짜증나죽겠다.
+*/
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n;
+		long long x;
+		cin >> n >> x;
+
+		/*int n_th = 0;
+		long long sumVal = 0;
+		while (1) {
+			if (x == 0) break;
+			int b = x % 10;
+			sumVal += pow(n, n_th)*b;
+			x = x / 10;
+			n_th++;
+		}
+		
+		cout << sumVal << endl;
+		int ans = sumVal % (n - 1);*/
+
+		long sumVal = 0;
+		while (1) {
+			if (x == 0) break;
+			int b = x % 10;
+			//cout <<"값이잖아"<< b << endl;
+			sumVal += b;
+			x = x / 10;
+		}
+		int ans = sumVal % (n - 1);
+
+		cout << "#" << " " << ans << endl;
+	}
+
+	return 0;
+}
