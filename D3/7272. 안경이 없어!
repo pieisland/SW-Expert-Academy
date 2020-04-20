@@ -1,0 +1,63 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+/*
+200420
+7272. 안경이 없어!
+공백이 있길래 getline으로 받아야되는건줄 알았는데
+그냥 string 2개 하면 굉장히 쉽게 풀 수 있어서
+너무 어이가 없었음.
+*/
+
+int alpha[26] = {1, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+//ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		string str1, str2;
+		cin >> str1 >> str2;
+		/*string str;
+		getline(cin, str);
+		cin.ignore(256, '\n');*/
+		/*int spaceIdx = 0;
+		for (int i = 0; i < str.size(); i++) {
+			if (str[i] == ' ') {
+				//cout << "????" << endl;
+				spaceIdx = i;
+				break;
+			}
+		}*/
+
+		if (str1.size() != str2.size()) {
+			cout << "#" << t << " " << "DIFF" << '\n';
+		}
+		else {
+			int check = 0;
+
+			for (int i = 0; i < str1.size(); i++) {
+				int idx1 = str1[i] - 'A';
+				int idx2 = str2[i] - 'A';
+				if (alpha[idx1] != alpha[idx2]) {
+					check = 1;
+					break;
+				}
+			}
+
+			if(check==1)
+				cout << "#" << t << " " << "DIFF" << '\n';
+			else
+				cout << "#" << t << " " << "SAME" << '\n';
+		}
+	}
+
+
+	return 0;
+}
