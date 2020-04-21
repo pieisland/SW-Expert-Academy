@@ -1,0 +1,74 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+using namespace std;
+
+/*
+200421
+6057. 그래프의 삼각형
+오랜만에 푼 그래프 문제. 연결만 잘 해두면 된다.
+그리고 dfs로 3개의 수를 찾아 연결이 되어있는지 확인.
+*/
+
+int edges[51][51];
+int answer;
+int n, m;
+
+void dfs(int start, int cnt, vector<int> sel) {
+
+	if (cnt == 3) {
+		int p1, p2, p3;
+		p1 = sel[0];
+		p2 = sel[1];
+		p3 = sel[2];
+		if (edges[p1][p2] == 1 && edges[p2][p3] == 1 && edges[p1][p3] == 1)
+			answer++;
+		return;
+	}
+
+	if (start > n) return;
+
+	for (int i = start; i <= n; i++) {
+		sel.push_back(i);
+		dfs(i + 1, cnt + 1, sel);
+		sel.pop_back();
+	}
+}
+
+void clearEdges() {
+	for (int i = 0; i < 51; i++)
+		for (int j = 0; j < 51; j++)
+			edges[i][j] = 0;
+}
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+
+		cin >> n >> m;
+		clearEdges();
+		answer = 0;
+		for (int i = 0; i < m; i++) {
+			int y, x;
+			cin >> y >> x;
+			edges[y][x] = 1;
+			edges[x][y] = 1;
+		}
+
+		//정점들의 개수만큼 세 개를 골라가지구
+		//그게 전부 1인지를 보면 되려나?
+		vector<int> select;
+		dfs(1, 0, select);
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
