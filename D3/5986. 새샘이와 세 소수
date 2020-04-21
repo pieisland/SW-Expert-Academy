@@ -1,0 +1,113 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+using namespace std;
+
+/*
+200421
+5986. 새샘이와 세 소수
+이중 for문이 더 빠를 수가 있구나.
+*/
+
+int tmp[1000];
+vector<int> decimal;
+vector<int> sel;
+int answer;
+int n;
+
+void eratos() {
+	//이걸 2부터 써야됨.
+	for (int i = 2; i < 1000; i++) {
+		for (int j = i+i; j < 1000; j += i) {
+			if (tmp[j] == 0)
+				continue;
+			tmp[j] = 0;
+		}
+	}
+}
+
+void dfs(int start, int cnt, int sum, int number, int idx) {
+	
+	if (sum > number) return;
+	
+	if (cnt == 3) {
+		int sumVal = 0;
+		for (int i = 0; i < 3; i++) {
+			sumVal += sel[i];
+			
+		}
+
+		if (sumVal == number) {
+			//cout << sel[0]<<sel[1]<<sel[2] << "\n";
+			answer++;
+		}
+
+		return;
+	}
+
+	for (int i = start; i < idx+1; i++) {
+		sel.push_back(decimal[i]);
+		dfs(i, cnt + 1, sum+decimal[i], number, idx);
+		sel.pop_back();
+	}
+}
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int i = 0; i < 1000; i++) {
+		tmp[i] = i;
+	}
+	eratos();
+
+	for (int i = 2; i < 1000; i++) {
+		if (tmp[i] != 0) {
+			decimal.push_back(i);
+		}
+	}
+
+	for (int t = 1; t <= tc; t++) {
+		answer = 0;
+
+		cin >> n;
+
+		int idx = 0;
+
+		for (int i = 0; i < decimal.size(); i++) {
+			//cout << decimal[i] << " " << endl;
+
+			if (decimal[i] > n) {
+				idx = i;
+				break;
+			}
+		}
+
+		//dfs(0, 0, 0, n, idx);
+
+		//dfs는 시간초과 나는데
+		//얘는 이게 되는게 너무 신기해요.
+		//거르는 게 있어서 그런건가..? 하지만 dfs에서도
+		//거르는 거 했었는데.. ㅠㅠ..
+		for (int x = 2; x <= n - 4; x++) {
+			if (tmp[x] == 0) continue;
+			for (int y = x; y <= n - x - 2; y++) {
+				if (tmp[y] == 0) continue;
+				int z = n - x - y; //두 수가 정해지면 z는 자동으로 정해진다.
+				//cout << x << y << z << endl;
+				if (y > z) continue; //하지만 크기 순서가 안맞을 수 있으니 걸러준다.
+				if (tmp[z]!=0) answer++;//z도 소수가 맞다면 증가.
+			}
+		}
+
+		cout << "#" << t << " " << answer << "\n";
+	}
+
+	return 0;
+}
