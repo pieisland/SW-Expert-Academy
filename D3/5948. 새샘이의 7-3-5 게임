@@ -1,0 +1,60 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+/*
+200421
+5948. 새샘이의 7-3-5 게임
+중복을 체크해야하는 게 제일 중요한 거였다.
+for문으로 간단하게 풀 수 있다.
+항상 선택하는 건 dfs로 했던 것 같은데 for문이 더 빠른 것 같기도 하다.
+*/
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		int number[7] = { 0, };
+		for (int i = 0; i < 7; i++)
+			cin >> number[i];
+
+		int sumVal[35];//최대 35개 가능.
+		int idx = 0;
+		for (int i = 0; i < 5; i++) {
+			for (int j = i + 1; j < 6; j++) {
+				for (int k = j + 1; k < 7; k++) {
+					//중복이 아니라면 배열에 넣는다.
+					int val = number[i] + number[j] + number[k];
+	
+					bool check = true;
+					for (int d = 0; d < idx; d++) {
+						if (sumVal[d] == val) {
+							check = false;
+							break;
+						}
+					}
+					if (check) {
+						sumVal[idx++] = val;
+					}
+				}
+			}
+		}
+
+		sort(sumVal, sumVal + idx);
+		/*for (int i = 0; i < idx; i++)
+			cout << sumVal[i] << " ";
+		cout << endl;*/
+		cout << "#" << t << " " << sumVal[idx-5] << '\n';
+	}
+
+	return 0;
+}
