@@ -1,0 +1,44 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+/*
+200421
+5688. 세제곱근을 찾아라
+long은 10의 18승까지 표현할 수 있다고 한다.
+솔직히 1부터 찾는 거 너무 오래걸릴 것 같아서 그랬는데
+그냥 하면 되는거였다...
+더 커지면 끊어주면 되는 거였음.
+*/
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		long n;
+		cin >> n;
+		long answer = -1;
+
+		for (long i = 1; i <= n; i++) {
+			if (i*i*i == n) {
+				answer = i;
+				break;
+			}
+			else if (i*i*i > n) {
+				break;
+			}
+		}
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
