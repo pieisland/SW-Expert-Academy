@@ -1,0 +1,41 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+/*
+200421
+6692. 다솔이의 월급 상자
+회사 너무하네.
+float이 아니라 double을 쓰자.
+소수점 자리 정하는 것도 배우자.
+*/
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		int n;
+		cin >> n;
+		double p;
+		int x;
+		double sum = 0;
+		for (int i = 0; i < n; i++) {
+			cin >> p >> x;
+			sum += p * x;
+		}
+
+		printf("#%d %.6lf\n", t, sum);
+		//cout << "#" << t << " " << sum << '\n';
+	}
+
+	return 0;
+}
