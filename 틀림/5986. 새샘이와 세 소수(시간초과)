@@ -1,0 +1,96 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+using namespace std;
+
+/*
+200421
+5986. 새샘이와 세 소수
+dfs로 풀면 당연히 시간 초과가 난다.
+알면서 돌려봄. 어떻게 해야 빨리 되나?
+*/
+
+int tmp[1000];
+vector<int> decimal;
+vector<int> sel;
+int answer;
+
+void eratos() {
+	//이걸 2부터 써야됨.
+	for (int i = 2; i < 1000; i++) {
+		for (int j = i+i; j < 1000; j += i) {
+			if (tmp[j] == 0)
+				continue;
+			tmp[j] = 0;
+		}
+	}
+}
+
+void dfs(int start, int cnt, int number, int idx) {
+	if (cnt == 3) {
+		int sumVal = 0;
+		for (int i = 0; i < 3; i++) {
+			sumVal += sel[i];
+			
+		}
+
+		if (sumVal == number) {
+			//cout << sel[0]<<sel[1]<<sel[2] << "\n";
+			answer++;
+		}
+
+		return;
+	}
+
+	for (int i = start; i < idx+1; i++) {
+		sel.push_back(decimal[i]);
+		dfs(i, cnt + 1, number, idx);
+		sel.pop_back();
+	}
+}
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int i = 0; i < 1000; i++) {
+		tmp[i] = i;
+	}
+	eratos();
+
+	for (int i = 2; i < 1000; i++) {
+		if (tmp[i] != 0) {
+			decimal.push_back(i);
+		}
+	}
+
+	for (int t = 1; t <= tc; t++) {
+		answer = 0;
+
+		int n;
+		cin >> n;
+
+		int idx = 0;
+
+		for (int i = 0; i < decimal.size(); i++) {
+			//cout << decimal[i] << " " << endl;
+
+			if (decimal[i] > n) {
+				idx = i;
+				break;
+			}
+		}
+
+		dfs(0, 0, n, idx);
+
+		cout << "#" << t << " " << answer << "\n";
+	}
+
+	return 0;
+}
