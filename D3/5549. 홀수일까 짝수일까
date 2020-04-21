@@ -1,0 +1,36 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+/*
+200421
+5549. 홀수일까 짝수일까
+숫자라고 했지만 너무 길기 때문에 string으로 받아서
+마지막 자리 수만 따지면 되는 문제.
+*/
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		string answer;
+		string s;
+		cin >> s;
+		int idx = s.size()-1;
+		int num = s[idx] - '0';
+		if (num % 2 == 1) answer = "Odd";
+		else answer = "Even";
+		
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
