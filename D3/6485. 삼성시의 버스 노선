@@ -1,0 +1,50 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+using namespace std;
+
+/*
+200421
+6485. 삼성시의 버스 노선
+a에서 b까지 저장하면 되는 문제.
+조금 헷갈림.
+*/
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n;
+		cin >> n;
+		int nosun[5001] = {0,};
+		for (int i = 0; i < n; i++) {
+			int a, b;
+			cin >> a >> b;
+			for (int j = a; j <= b; j++) {
+				nosun[j]++;
+			}
+		}
+		int p;
+		cin >> p;
+
+		vector<int> ans;
+		for (int i = 0; i < p; i++) {
+			int c;
+			cin >> c;
+			ans.push_back(c);
+		}
+		cout << "#" << t<<" ";
+		for (int i = 0; i < p; i++) {
+			cout << nosun[ans[i]] << " ";
+		}
+		cout << "\n";
+	}
+
+	return 0;
+}
