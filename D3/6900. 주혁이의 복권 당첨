@@ -1,0 +1,62 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+using namespace std;
+
+/*
+200421
+6900. 주혁이의 복권 당첨
+문자열 비교 문제.
+*/
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		vector<pair<string, int>> vec;
+		int n, m;
+		int money = 0;
+		cin >> n >> m;
+		for (int i = 0; i < n; i++) {
+			string s;
+			int mon;
+			cin >> s >> mon;
+			vec.push_back({ s, mon });
+		}
+
+		//내가 산 복권에 대해서
+		for (int i = 0; i < m; i++) {
+			string s;
+			cin >> s;
+
+			//아까 받아둔 복권들.
+			for (int k = 0; k < n; k++) {
+				//8자리를 비교하는데..
+				bool check = true;
+				for (int j = 0; j < 8; j++) {
+					if (vec[k].first[j] == s[j] || vec[k].first[j] == '*') {
+						continue;
+					}
+					else {
+						check = false;
+						break;
+					}
+				}
+				if (check) {
+					money += vec[k].second;
+					break;//한 번 밖에 안되기 떄문에 break
+				}
+			}
+		}
+
+		cout << "#" << t<<" " << money << '\n';
+	}
+
+	return 0;
+}
