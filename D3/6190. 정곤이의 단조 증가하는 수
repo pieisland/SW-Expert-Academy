@@ -1,0 +1,70 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+using namespace std;
+
+/*
+200421
+6190. 정곤이의 단조 증가하는 수
+수 다루기 문제.
+증가는 감소로 풀면 된다.
+*/
+
+int isIncrease(int number) {
+	int bnum = number % 10;
+	number = number / 10;
+
+	int ret = 1;
+
+	while (number != 0) {
+		int tmp = number % 10;
+		if (tmp <= bnum) {
+			//증가하고 있는거죠.
+			bnum = tmp;
+			number /= 10;
+		}
+		else
+		{
+			ret = 0;
+			break;
+		}
+	}
+	return ret;
+}
+
+int main(void) {
+
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n;
+		cin >> n;
+		vector<int> num(n);
+		for (int i = 0; i < n; i++) {
+			cin >> num[i];
+		}
+
+		int answer = -1;
+		for (int i = 0; i < n - 1; i++) {
+			for (int j = i + 1; j < n; j++) {
+				int number = num[i] * num[j];
+				//단조증가수인지 확인한다.
+				//뒤에서부터 감소하는지 봄.
+				if (isIncrease(number) == 1)
+				{
+					//단소증가수이다.
+					if (answer < number) answer = number;
+				}
+			}
+		}
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
