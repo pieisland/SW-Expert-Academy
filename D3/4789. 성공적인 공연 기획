@@ -1,0 +1,44 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+/*
+200422
+4789. 성공적인 공연 기획
+문제 이해가 헷갈렸던 문제.
+필요한 사람보다 적으면 더해주면 된다.
+*/
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+	
+	for (int t = 1; t <= tc; t++) {
+		string s;
+		cin >> s;
+		int clapPeople = 0;
+		int hired = 0;
+		for (int i = 0; i < s.size(); i++) {
+			if (s[i] - '0' != 0) { //박수치는 사람이 있을 때만 보면 됨.
+				if (i > clapPeople) {
+					int diff = i - clapPeople;
+					hired += diff; //차이를 더해주고
+					clapPeople += diff;
+				}
+				clapPeople += s[i] - '0'; //같이 더해줌.
+			}
+		}
+
+		cout << "#" << t << " " << hired << '\n';
+	}
+
+	return 0;
+}
