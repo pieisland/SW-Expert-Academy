@@ -1,0 +1,86 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+/*
+200422
+5658. [모의 SW 역량테스트] 보물상자 비밀번호
+여러가지를 연습해볼 수 있는 문제.
+한 칸씩 이동하기, 첫 index 바꾸기, 문자를 숫자로 변환하기,
+자리수에 따라 계산하기 등..
+다 모아둔 문제.
+*/
+
+bool cmp(int a, int b) {
+	return a > b;
+}
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		int n, k;
+		cin >> n >> k;
+		int len = n / 4;
+		string locker;
+		cin >> locker;
+		vector<int> val;
+
+		for (int i = 0; i < len; i++) {
+			for (int j = 0; j < n; j += len) {
+				int num = 0;
+				for (int p = 0; p < len; p++) {
+					int tmp;
+					if ('0' <= locker[j + p] && locker[j + p] <= '9')
+						tmp = locker[j + p] - '0';
+					else if ('A' <= locker[j + p] && locker[j + p] <= 'F')
+						tmp = locker[j + p] - 'A'+10;
+
+					//cout << "tmp값은; " << tmp << endl;
+					//cout << pow(16, len - p - 1) << endl;
+
+					num += pow(16, len - p - 1)*tmp;
+				}
+
+				//cout <<"값은: "<< num << endl;
+
+				bool check = true;
+				//중복이 아니면 넣어주는거임.
+				for (int a = 0; a < val.size(); a++) {
+					if (val[a] == num) {
+						check = false;
+						break;
+					}
+				}
+				if (check) val.push_back(num);
+			}
+
+			//이제 이동.
+			char tmp = locker[locker.size() - 1];
+			for (int i = locker.size()-1; i >= 0; i--) {
+				locker[i + 1] = locker[i];
+			}
+			locker[0] = tmp;
+
+			//cout << "이동" << locker << endl;
+		}
+		
+		sort(val.begin(), val.end(), cmp);
+
+		/*for (int i = 0; i < val.size(); i++)
+			cout << val[i] << " ";
+		cout << endl;*/
+
+		cout << "#" << t << " " << val[k-1] << '\n';
+	}
+
+	return 0;
+}
