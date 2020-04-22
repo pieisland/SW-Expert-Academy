@@ -1,0 +1,193 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+/*
+200422
+5656. [모의 SW 역량테스트] 벽돌 깨기
+dfs, bfs, 기록, 좌표 이동, 스택까지 연습할 수 있는 문제.
+dfs로 가능한 모든 경우의 수를 찾고
+bfs로 그 경우의 수에 따라서 벽돌을 삭제하고
+스택으로 자리를 다시 옮겨주어 아래서부터 차곡차곡 쌓은 후에
+개수를 센다.
+*/
+
+int map[15][12];
+int tmpmap[15][12];
+int check[15][12];
+int dir[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+int n, w, h;
+int answer;
+
+bool isinside(int y, int x) {
+	if (y >= 0 && y < h && x >= 0 && x < w) return true;
+	else return false;
+}
+
+void bfs(int pos) {
+	//받은 게 x값.
+	queue<pair<int, int>> q;
+	int y=-1, x=-1;
+	for (int i = 0; i < h; i++) {
+		//위에서부터 숫자가 최초로 0이 아닌 위치를 찾는다.
+		if (tmpmap[i][pos] != 0) {
+			y = i;
+			x = pos;
+			break;
+		}
+	}
+
+	//자리를 못찾았다면 더이상 깰 게 없는 것.
+	if (y == -1) return;
+
+	q.push({ y, x });
+	check[y][x] = 1;
+	while (!q.empty()) {
+		int cy, cx;
+		int val;
+		cy = q.front().first;
+		cx = q.front().second;
+		val = tmpmap[cy][cx];
+		q.pop();
+
+		//상하좌우로 확인해야되는데.. val-1만큼..^0^
+		for(int i = 0; i < 4; i++){
+			int my = dir[i][0];
+			int mx = dir[i][1];
+			for (int j = 1; j <= val - 1; j++) {
+				int ny = cy + my * j;
+				int nx = cx + mx * j;
+
+				if (isinside(ny, nx) && check[ny][nx] == 0) {
+					if (tmpmap[ny][nx] != 0) {
+						q.push({ ny, nx });
+						check[ny][nx] = 1;//이미 확인 함.
+					}
+				}
+			}
+		}
+	}
+
+	//확인이 다 끝났습니다.
+	//check가 1인 애들을 다 삭제하고
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			if (check[i][j] == 1)
+				tmpmap[i][j] = 0;
+		}
+	}
+
+	//0인 부분 없게 아래로 내린다.
+	for (int j = 0; j < w; j++) {
+		for (int i = h - 1; i >= 0; i--) {
+			if (tmpmap[i][j] == 0) {
+				//빈 공간이 됐다면 찾아야 됩니다.
+				int pos = -1;
+				for (int l = i - 1; l >= 0; l--) {
+					if (tmpmap[l][j] != 0) {
+						pos = l;
+						break;
+					}
+				}
+				//내려서 채우고 내려온 값이 있던 자리는 0으로 바꾼다.
+				if (pos != -1) {
+					tmpmap[i][j] = tmpmap[pos][j];
+					tmpmap[pos][j] = 0;
+				}
+			}
+		}
+	}
+}
+
+//bfs에서 사용할 check를 초기화.
+void clearCheck() {
+	for (int i = 0; i < 15; i++)
+		for (int j = 0; j < 12; j++)
+			check[i][j] = 0;
+}
+
+//남은 블록의 개수를 센다.
+int countBlock() {
+	int ret = 0;
+	for(int i=0;i<h;i++)
+		for (int j = 0; j < w; j++) {
+			if (tmpmap[i][j] != 0) ret++;
+		}
+
+	return ret;
+}
+
+//다시 초기 상태로.
+void tmpToMap() {
+	for (int i = 0; i < 15; i++)
+		for (int j = 0; j < 12; j++)
+			tmpmap[i][j] = map[i][j];
+}
+
+void showblock() {
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			cout << tmpmap[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+
+void dfs(int mycnt, int cnt, vector<int> sel) {
+	if (mycnt == cnt) {
+		//tmpmap을 다시 map으로 초기화한 다음에 해야됨.
+		tmpToMap();
+
+		//뽑은 위치로 구슬을 던진다.
+		for (int i = 0; i < sel.size(); i++) {
+			bfs(sel[i]);
+			clearCheck();
+		}
+
+		//몇 개가 남아있는지 센다.
+		int cnt = countBlock();
+		//showblock();
+		if (cnt < answer) answer = cnt;
+
+		return;
+	}
+
+	for (int i = 0; i < w; i++) {
+		sel.push_back(i);
+		dfs(mycnt + 1, cnt, sel);
+		sel.pop_back();
+	}
+}
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		//큰 수를 넣어둔다.
+		answer = 987654321;
+		cin >> n >> w >> h;
+		for (int i = 0; i < h; i++) {
+			for (int j = 0; j < w; j++) {
+				cin >> map[i][j];
+				tmpmap[i][j]= map[i][j];
+			}
+		}
+
+		//0부터 w-1 중에 n개를 뽑는다.
+		vector<int> v;
+		dfs(0, n, v);
+
+		cout <<"#" << t <<" "<< answer << '\n';
+	}
+
+	return 0;
+}
