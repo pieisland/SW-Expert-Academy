@@ -1,0 +1,59 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+/*
+200422
+4698. 테네스의 특별한 소수
+아니.. 채점 시스템 도대체 뭐야.
+동일한 코드로 다시 채점했는데 어떨 때는 fail 뜨고
+어떨 때는 pass 뜨네.. 진짜 이해할 수가 없음.
+소수 문제는 일단 에라토스테네스의 체로 빠르게 거르고
+그걸 이용하면 되는 문제인 것 같다.
+*/
+
+int eratos[1000001];
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int i = 2; i <= 1000000; i++)
+		eratos[i] = i;
+
+	//에라토스테네스의 체
+	for (int i = 2; i <= 1000000; i++) {
+		for (int j = i + i; j <= 1000000; j += i) {
+			if (eratos[j] == 0) continue;
+			eratos[j] = 0;
+		}
+	}
+
+	for (int t = 1; t <= tc; t++) {
+		int d, a, b;
+		int answer = 0;
+		cin >> d >> a >> b;
+		for (int i = a; i <= b; i++) {
+			if (eratos[i] == 0) continue;
+			string tmp = to_string(eratos[i]);
+			for (int j = 0; j < tmp.size(); j++) {
+				if (tmp[j] - '0' == d) {
+					answer++;
+					break;
+				}
+			}
+		}
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
