@@ -1,0 +1,77 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+/*
+200422
+뭐였는지도 까먹음. 무슨 게임이었는데..;
+*/
+
+int map[9][9];
+int dir[8][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
+
+void initMap() {
+	for (int i = 0; i < 9; i++)
+		for (int j = 0; j < 9; j++)
+			map[i][j] = 0;
+
+	map[4][4] = 2;
+	map[4][5] = 1;
+	map[5][4] = 1;
+	map[5][5] = 2;
+}
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+
+	for (int t = 1; t <= tc; t++) {
+		initMap();
+
+		int n, m;
+		cin >> n >> m;
+
+		//m개의 수 놓기
+		for (int i = 0; i < m; i++) {
+			int y, x;
+			cin >> x >> y;
+			//그림 보니까 내가 상각하는 거랑 달라서
+			//x, y로 받아요.
+			if (n == 4) {
+				x += 2;
+				y += 2;
+			}
+			else if (n == 6) {
+				x += 1;
+				y += 1;
+			}
+			//8이면 상관 없습니다.
+
+			//그 자리에 놓을 수 있는지 판단한다.
+			//그걸 어떻게 판단할까요?
+			//자신이 놓을 돌과 자신의 돌 사이에 상대편의 돌이 있다.
+			for (int j = 0; j < 8; j++) {
+				int ny = y + dir[i][0];
+				int nx = x + dir[i][1];
+
+				//진짜 ㅋㅋㅋ 이 게임을 모르니까
+				//어떻게 해야될 지 모르겠는데.
+				
+			}
+
+		}
+
+		//cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
