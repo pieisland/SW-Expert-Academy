@@ -1,0 +1,52 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+/*
+200422
+5356. 의석이의 세로로 말해요 
+사이즈가 안 맞으면 continue하면 된다.
+*/
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		string s[5];
+		int size[5];
+		int maxSize = 0;
+		for (int i = 0; i < 5; i++) {
+			cin >> s[i];
+			size[i] = s[i].size();
+			if (size[i] > maxSize) maxSize = size[i];
+		}
+		vector<char> answer;
+		
+		int lenIdx = 0;
+		while (lenIdx < maxSize) {
+			for (int i = 0; i < 5; i++) {
+				if (size[i] <= lenIdx)
+					continue;
+				answer.push_back(s[i][lenIdx]);
+			}
+			lenIdx++;
+		}
+
+		cout << "#" << t << " ";
+		for (int i = 0; i < answer.size(); i++)
+			cout << answer[i];
+		cout << "\n";
+		//cout <<"#" << t <<" "<< answer << '\n';
+	}
+
+	return 0;
+}
