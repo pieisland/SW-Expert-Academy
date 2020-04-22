@@ -1,0 +1,115 @@
+#include<iostream>
+#include<string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+/*
+200422
+5653. [모의 SW 역량테스트] 줄기세포배양
+역시 무식하게 배열로 돌려서 그런지 시간초과난다.
+.. 큐를 쓰기에도 바로 번식이 되는 게 아니라서 애매하다고 생각하는데
+어떻게 하길 바라는걸까.
+*/
+
+int map[1001][1001];
+int status[1001][1001];
+int n, m, k;//세로 가로 배양시간
+int dir[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+
+void clearMap() {
+	for(int i=0;i<1000;i++)
+		for (int j = 0; j < 1000; j++) {
+			map[i][j] = 0;
+			status[i][j] = 0;
+		}
+}
+
+void show() {
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			cout << map[i+495][j+495] << " ";
+		}
+		cout << endl;
+	}
+}
+
+
+int main(void) {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int tc;
+	cin >> tc;
+
+	for (int t = 1; t <= tc; t++) {
+		cin >> n >> m >> k;
+		clearMap();
+		int sy, sx;
+		sy = 500 + n / 2;
+		sx = 500 + m / 2;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				cin >> map[sy + i][sx + j];
+				status[sy + i][sx + j] = -map[sy + i][sx + j];
+			}
+		}
+
+		//k번의 시간이 흐릅니다.
+		for (int i = 0; i < k; i++) {
+
+			//map에 있는 값 중 아직 활성상태인 애들 상태 변화.
+			for (int a = 0; a < 1000; a++) {
+				for (int b = 0; b < 1000; b++) {
+					if (map[a][b] != 0 && status[a][b] < map[a][b])
+						status[a][b] += 1;
+				}
+			}
+
+			//status 상태가 0이면 활성이 된거고
+			//1이면 번식해야 되는거고
+			//map값이랑 같으면 죽은거다.
+			for (int a = 0; a < 1000; a++) {
+				for (int b = 0; b < 1000; b++) {
+					if (status[a][b] == 1) {
+						//번식해야됨.
+						for (int d = 0; d < 4; d++) {
+							int ny = a + dir[d][0];
+							int nx = b + dir[d][1];
+
+							//원래 없던 애
+							if (map[ny][nx] == 0) {
+								map[ny][nx] = map[a][b];
+								status[ny][nx] = -map[a][b];
+							}
+							//이번 번식으로 새로 생긴 애
+							else if (map[ny][nx] != 0 && status[ny][nx] + map[ny][nx] == 0) {
+								if (map[ny][nx] < map[a][b]) {//생명력 높은 애로 바꾼다.
+									map[ny][nx] = map[a][b];
+									status[ny][nx] = -map[a][b];
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//show();
+
+		int answer = 0;
+		for (int i = 0; i < 1000; i++) {
+			for (int j = 0; j < 1000; j++) {
+				if (map[i][j] != 0 && status[i][j] >= -map[i][j] && status[i][j] < map[i][j])
+					answer++;
+			}
+		}
+
+		cout <<"#" << t <<" "<< answer << '\n';
+	}
+
+	return 0;
+}
