@@ -1,0 +1,141 @@
+#include<iostream>
+#include <queue>
+using namespace std;
+
+/*
+200427
+1953. [모의 SW 역량테스트] 탈주범 검거 
+*/
+ 
+int n, m;
+int l;
+int map[51][51];
+int check[51][51];
+int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+int opposite[4] = {1, 0, 3, 2};
+//쓸 때 하나 빼서 써야된다.
+int tunnel[7][4] ={{1, 1, 1, 1}, {1, 1, 0, 0}, {0, 0, 1, 1}, {1, 0, 0, 1}, {0, 1, 0, 1}, {0, 1, 1, 0}, {1, 0, 1, 0}};
+               
+void clearMap()
+{
+    for(int i=0;i<51;i++)
+        for(int j=0;j<51;j++){
+            map[i][j]=0;
+            check[i][j]=0;
+        }
+}
+ 
+bool isinside(int y, int x)
+{
+    if(y>=0 && y<50 && x>=0 &&x<50) return true;
+    else return false;
+}
+ 
+void show()
+{
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+            cout<<check[i][j];
+        }
+        cout<<endl;
+    }
+}
+ 
+//시간을 count할 때 사실.. 음..
+//그렇게 하면 안되는거죠.
+//따로 그 애들한테 다 넣어줘야되는겁니다만.
+//그래서 마지막에 세는건가..?
+//아니다 세는 건 하면서 세면 디ㅗ는거고.
+//시간에 대해서는 그 때 뭐 내가 그 시간이면은 그만 넣으면 되는거고.
+int bfs(int r, int c, int time)
+{
+    //cout<<"e로았냐.."<<endl;
+    //cout<<r<<c<<endl;
+     
+    //int remainTime = time;
+    int ret=1;
+    int cy=r;
+    int cx=c;
+    check[cy][cx]=1;
+    queue<pair<int, int>> q;
+    q.push({cy, cx});
+     
+    while(!q.empty())
+    {
+ 
+        cy = q.front().first;
+        cx = q.front().second;
+        q.pop();
+         
+                //cout<<"지금위치"<<cy<<" "<<cx<<endl;
+         
+        //내가 제한 시간 내에 갈 수 있는 거라서 더이상 큐에 넣으면 안된다.
+        if(check[cy][cx]==time)
+            continue;
+         
+        //음.. 시간을 어떻게 해야되는걸까? 어디서 감소시켜야 될까..?
+        //if(remainTime==0) break;
+         
+        int val = map[cy][cx]-1;
+         
+        //4개의 방향에 대해서
+        for(int i=0;i<4;i++)
+        {
+                int ny = cy + dir[i][0];
+                int nx = cx + dir[i][1];
+                //cout<<"i방향 "<<i<<endl;
+           // cout<<"새위치 "<<ny<<" "<<nx<<endl;
+            //cout<<"val "<<val<<endl;
+                //그쪽 방향으로 갈 수 있으면..
+                if(val>=0 && tunnel[val][i]==1)
+                {
+                    //새로운 좌표가 범위를 벗어나지 않았고/ 아직 가지 않았고 / 터널 파이프 값이면
+                    if(isinside(ny, nx) && check[ny][nx]==0 && map[ny][nx]>0){
+                        int tmp = map[ny][nx] -1; //어떤 파이프인가
+                        int j = opposite[i]; //i와 연결이 될 수 있는가 
+                       // cout<<"tmp, j : "<<tmp<<" "<<j<<endl;
+                         
+                        if(tunnel[tmp][j]==1){ //연결이 될 수 있다면
+                           // cout<<"들어간다.."<<endl;
+                            q.push({ny, nx}); //넣어주고
+                            check[ny][nx] = check[cy][cx]+1; //증가해주고
+                            ret++; //정답은 1 증가.
+                        }
+                    }
+                }
+        }       
+    }
+     
+    //show();
+     
+    return ret;
+}
+ 
+int main(void)
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+     
+    int tc;
+    cin>>tc;
+     
+    for(int t=1;t<=tc;t++)
+    {
+        clearMap();
+        int r,c;
+        cin>>n>>m>>r>>c>>l;
+        //cout<<n<<m<<r<<c<<l<<endl;
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++)
+                cin>>map[i][j];
+         
+        int answer = bfs(r, c, l);
+         
+        cout<<"#"<<t<<" "<<answer<<"\n";
+    }
+   
+    return 0;
+}
