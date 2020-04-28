@@ -1,0 +1,84 @@
+#include <iostream>
+using namespace std;
+ 
+ /*
+ 200428
+ 2105. [모의 SW 역량테스트] 디저트 카페
+ 내가 푼 거 아님.
+ 너무.. 신경 쓸 게 많은 것 같아서
+ 감을 못잡겠기에 다른 사람이 푼 걸 봤는데
+ 방향 전환의 개수로 이걸 판단하는 게 너무 신기했음..
+ ㅠㅠㅠ.. 에휴..
+ 이 사람이 dfs 쓰는 방식이랑 내가 쓰는 방식이랑 조금 달라서
+ 헷갈려.
+ */
+ 
+int n;
+int cafe[20][20];
+//이건 뭘 해야되는거지..?
+int dir[4][2] = { {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
+//방문한 가게면 1로 해둔다.
+//방향도 가지고 있어야 할텐데..?
+int dessert[101];
+int ans;
+int sy, sx;
+ 
+//어떻게 시작해야되는거지..?
+ 
+bool isinside(int y, int x) {
+    if (y >= 0 && y < n && x >= 0 && x < n) return true;
+    else return false;
+}
+ 
+//현재 위치, 지금까지 간 디저트 카페 수, 이전 방향, 방향전환 횟수
+void dfs(int y, int x, int l, int d, int change) {
+    if (change >= 5) return; //방향 전환을 5번 이상 한거라면 잘못된 것.
+    dessert[cafe[y][x]] = 1; //방문 표시
+    for (int i = 0; i < 4; i++) { //네 개의 방방향에 대해서 
+        int ny = y + dir[i][0];
+        int nx = x + dir[i][1];
+ 
+        //처음 위치에 도착했고 방문한 지점이 4개 이상며 방향전환이 3번이나 4번이면
+        if (ny == sy && nx == sx && l >= 4 && change >= 3) {
+            ans = ans < l ? l : ans;
+            dessert[cafe[y][x]] = 0;
+            return;
+        }
+        //범위 안맞거나 값이 같은 가게를 이미 들렀다면
+        if (!isinside(ny, nx) || dessert[cafe[ny][nx]]) continue;
+ 
+        //다음 방향으로 이동하는데 가게 개수 1 증가하고 방향은 i로 방향전환은 같은지 안같은지.
+        dfs(ny, nx, l + 1, i, i == d ? change : change + 1);
+    }
+    dessert[cafe[y][x]] = 0;
+}
+ 
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+ 
+    int tc;
+    cin >> tc;
+    for (int t = 1; t <= tc; t++) {
+         
+        cin >> n;
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                cin >> cafe[i][j];
+ 
+        ans = -1;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                sy = i;
+                sx = j;
+                dfs(i, j, 1, -1, 0);
+            }
+        }
+ 
+        //방향 전환 횟수로 사각형이 만들어진다 아니다를 판단하는게 너무 신기함..
+        cout << "#" << t << " " << ans << '\n';
+    }
+ 
+    return 0;
+}
