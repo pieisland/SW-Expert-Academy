@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*
+2117. [모의 SW 역량테스트] 홈 방범 서비스
+마름모를 안 그려도 된다는 게 정말 좋다..
+마름모때문에 고생했는데
+거리로 하면 되더라.
+그리고 거리가 k는 k-1로 봐야됨.. ㅇ..
+이것때문에 당황했다.
+*/
+
+int map[20][20];
+int n, x;
+vector<pair<int, int>> home;
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int n, m;//도시 크기랑 집들이 지불 가능한 비용.
+		int answer = 0;
+		cin >> n >> m;
+		home.clear();
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				cin >> map[i][j];
+				if (map[i][j] == 1) {
+					home.push_back({ i, j });
+				}
+			}
+		}
+		//어차피 제일 작은 사각형의 크기가 n일텐데..?
+		for (int k = 1; k <= n+1; k++) {//해도 되는 거 아니야..?
+			//집에서 거리가 k이하이면 되는거임.
+			//cout << "k값: " << k << endl;
+			for (int i = 0; i < n; i++) {//모든 시작 위치에서
+				for (int j = 0; j < n; j++) {
+					//cout << i << " " << j << endl;
+					int serviceCnt = 0;
+					//모든 집에 대해서
+					for (int h = 0; h < home.size(); h++) {
+						int dist;
+						int y = home[h].first - i;
+						int x = home[h].second- j;
+						if (y < 0) y = -y;
+						if (x < 0) x = -x;
+						dist = y + x;
+					
+						if (dist <= k-1) { //마름모 모양 안에 있다면 개수를 센다.
+							//cout << dist << endl;
+							serviceCnt++;
+						}
+					}
+					//이제 확인 ㅇㅇ
+					if (-k*k - (k - 1)*(k - 1) + m * serviceCnt >= 0) {
+						//손해를 보지 않는다면
+						if (answer < serviceCnt) {
+							answer = serviceCnt;
+							//cout << answer << endl;
+						}
+					}
+				}
+			}
+		}
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
