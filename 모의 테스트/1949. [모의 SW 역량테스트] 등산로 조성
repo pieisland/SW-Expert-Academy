@@ -1,0 +1,168 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*
+20.05.02.토
+1949. [모의 SW 역량테스트] 등산로 조성
+for문을 너무 중첩해서 써서 되나 안되나 하긴 했지만
+그래도 되어서 다행..
+가장 큰 높이마다
+지형을 깎을 곳을 선택해서 얼마나 깎을지 정해 깎아서
+dfs로 가장 긴 거리를 찾아가면 된다.
+*/
+
+int n, k;
+int map[8][8];
+int tmpMap[8][8];
+int check[8][8];
+int dir[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+int answer;
+
+void show() {
+	cout << "방향" << endl;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cout << check[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cout << tmpMap[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+
+bool isinside(int y, int x) {
+	if (y >= 0 && y < n && x >= 0 && x < n) return true;
+	else return false;
+}
+
+void clearCheck() {
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			check[i][j] = 0;
+		}
+	}
+}
+
+//사실 할 떄 복구를 하기 때문에 굳이 필요하진 않았음.. 아마 tmpMap자체가 필요하지 않았을지도..
+void setTmpMap() {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++)
+		{
+			tmpMap[i][j] = map[i][j];
+		}
+	}
+}
+
+void dfs(int y, int x, int len) {
+	
+	bool flag = false;
+	
+	for (int i = 0; i < 4; i++) {
+		int ny = y + dir[i][0];
+		int nx = x + dir[i][1];
+
+		if (tmpMap[ny][nx] < tmpMap[y][x] && isinside(ny, nx) && check[ny][nx] == 0) {
+			//높이가 이전 값 이하이고 범위가 맞으며 가지 않은 곳이라면
+			flag = true;
+			check[ny][nx] = 1;
+			dfs(ny, nx, len + 1);
+			check[ny][nx] = 0;
+		}
+	}
+
+	//이제 갈 곳이 없는 거라면
+	if (flag == false) {
+
+		//show();
+
+		//더 길이가 길다면 ㅇㅇ
+		if (answer < len) {
+			answer = len;
+			//show();
+		}
+		return;
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		cin >> n >> k;
+		int maxVal = 0;
+		answer = 0;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++) {
+				cin >> map[i][j];
+				tmpMap[i][j] = map[i][j];
+				if (map[i][j] > maxVal)
+					maxVal = map[i][j];
+			}
+		}//1 이상 20이하의 정수라고 함..
+		
+		//cout <<"가장 큰 값: "<< maxVal << endl;
+
+		vector<pair<int, int>> top;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (map[i][j] == maxVal) {
+					//봉우리 높이라면 top에 저장한다.
+					top.push_back({ i, j });
+				}
+			}
+		}
+		//cout <<"제일 큰 거 몇개?: "<< top.size() << endl;
+
+		for (int v = 0; v < top.size(); v++) {
+			cout << top[v].first << " " << top[v].second << endl;
+			//봉우리에서 시작함.
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					if (i == top[v].first && j == top[v].second) {
+						//시작하려는 봉우리라면
+						continue;
+					}
+
+					//cout << "깎을 애 " << i << " " << j << endl;
+
+					int r;
+					if (maxVal>k) {
+						r = k;
+					}
+					else
+					{
+						r = maxVal;
+					}
+
+					for (int kk = 0; kk <= r; kk++) {
+						//kk만큼 깎을거다.
+						clearCheck();
+						tmpMap[i][j] -= kk;
+						check[top[v].first][top[v].second] = 1;
+						dfs(top[v].first, top[v].second, 1);
+						check[top[v].first][top[v].second] = 0;
+						tmpMap[i][j] += kk;//근데 다시 원상복구 시켜두면
+
+						//상관은 없을 듯
+					}
+				}
+			}
+		}
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
