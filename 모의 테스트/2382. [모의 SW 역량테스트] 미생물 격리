@@ -1,0 +1,156 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*
+20.05.02.토
+2382. [모의 SW 역량테스트] 미생물 격리
+합치는 것 때문에 헷갈렸을 뿐 쉬운 문제.
+*/
+
+int n, m, k;
+int map[100][100];//군집이 어디에 몇 개 있는지 확인 용도
+int dir[5][2] = { {0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1} };//상하좌우
+int reverseDir[5] = { 0, 2, 1, 4, 3 };//필요하겠죠..? 쉽게 하려면. 방향 변환.
+
+//미생물 군집의 위치와 미생물의 수와 이동 방향.
+struct microbe {
+	int y, x;
+	int cnt;
+	int d;
+} typedef Microbe;
+
+vector<Microbe> vec;
+vector<Microbe> vec2;//합쳐진 걸 담음.
+
+void clearMap() {
+	for (int i = 0; i < 100; i++)
+		for (int j = 0; j < 100; j++)
+			map[i][j] = 0;
+}
+
+void showMap() {
+	cout << endl;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cout << map[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		//map 초기화 해야됨.
+		clearMap();
+		vec.clear();
+		cin >> n >> m >> k;//크기, 시간, 군집 수
+		for (int i = 0; i < k; i++) {
+			//int y, x, cnt, d;
+			Microbe mi;
+			cin >> mi.y >> mi.x >> mi.cnt >> mi.d;//위치, 미생물 수, 방향
+			vec.push_back(mi);
+			map[mi.y][mi.x] += 1;
+		}
+
+		//m초의 시간만큼 흐릅니다.
+		for (int i = 0; i < m; i++) {
+			int ny, nx;
+
+			//showMap();
+
+			//k개가 모두 이동을 했다.
+			for (int j = 0; j < vec.size(); j++) {
+				int cy = vec[j].y;
+				int cx = vec[j].x;
+				map[cy][cx] -= 1;//초반에 있던 위치 삭제.
+				
+				//다 없어진 애들은 벡터에 담지 않으려고 하는 거임.
+				if (vec[j].cnt == 0) continue;
+				//cout << "위치" << cy << " " << cx << endl;
+
+				ny = cy + dir[vec[j].d][0];
+				nx = cx + dir[vec[j].d][1];
+
+				map[ny][nx] += 1;
+				vec[j].y = ny;
+				vec[j].x = nx;
+
+				//cout << "이동" << ny << " " << nx << endl;
+			}
+
+			//showMap();
+
+			//아니 포문이 너무 많아요...
+			vec2.clear();
+			for (int a = 0; a < n; a++) {
+				for (int b = 0; b < n; b++) {
+					if (map[a][b] == 1) {
+						for (int c = 0; c < vec.size(); c++) {
+							if (vec[c].y == a && vec[c].x == b) {
+								//같은 위치라면..
+								vec2.push_back(vec[c]);
+							}
+						}
+					}
+					else if (map[a][b] > 1) {
+						Microbe m;
+						m.y = a;
+						m.x = b;
+						//여러 개가 있는 곳이라면
+						int miSum = 0;
+						int maxVal = -100;
+						int direction = 0;
+				
+						for (int c = 0; c < vec.size(); c++) {
+							if (vec[c].y == a && vec[c].x == b) {
+								miSum += vec[c].cnt;
+								if (maxVal < vec[c].cnt)
+								{
+									maxVal = vec[c].cnt;
+									direction = vec[c].d;
+								}
+							}
+						}
+
+						m.cnt = miSum;
+						m.d = direction;
+						vec2.push_back(m);
+
+						map[a][b] = 1;
+					}
+				}
+			}//for문이고.
+
+			//가장자리에 도착했다면 반으로 줄어든다.
+			for (int a = 0; a < vec2.size(); a++) {
+				int y = vec2[a].y;
+				int x = vec2[a].x;
+				if (y == 0 || y == n - 1 || x == 0 || x == n - 1) {
+					//가장자리라면
+					vec2[a].cnt /= 2;//반으로 줄어든다.
+					//방향도 변화해야됨.
+					int myd = vec2[a].d;
+					vec2[a].d = reverseDir[myd];
+				}
+			}
+
+			vec = vec2;//다시 넣어주면
+		}//m 초의 시간이죠.
+
+		int answer = 0;
+		for (int i = 0; i < vec.size(); i++) {
+			answer+=vec[i].cnt;
+		}
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
