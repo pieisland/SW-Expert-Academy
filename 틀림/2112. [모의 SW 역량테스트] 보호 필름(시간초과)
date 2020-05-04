@@ -1,0 +1,149 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*
+2112. [모의 SW 역량테스트] 보호 필름
+시간초과랜다...^0^ 이거 어떻게 줄이냐..ㄴ
+*/
+
+int d, w, k;
+int film[13][20];
+int film2[13][20];//이게 근데 1로 바꾸냐 아니면 2로 바꾸냐도 생각을 해야 돼..
+int answer;
+vector<int> sel;//어떤 줄을 선택할 것인가
+vector<int> sel2;//그 줄을 무슨 값으로 모두 바꿀 것인가.
+
+//film2를 바꿨으니까 다시 돌리는건데..
+//아 근데 이렇게.. 하기엔 너무 헷갈리구요...ㅋㅋㅋ
+//되게 생각할 게 많네요..?ㅋㅋㅋㅋ
+void filmCopy() {
+	for (int i = 0; i < d; i++) {
+		for (int j = 0; j < w; j++) {
+			film2[i][j] = film[i][j];
+		}
+	}
+}
+
+int continueCnt() {
+	int contCnt = 0;
+	for (int j = 0; j < w; j++) {
+		bool cont = false;
+		for (int i = 0; i <= d - k; i++) {
+			int val = film2[i][j];
+			bool check = true;
+			for (int l = 0; l < k; l++) {
+				if (val != film2[i + l][j]) {
+					check = false;
+					break;
+				}
+			}
+			if (check == true) {
+				cont = true;
+				break;
+			}
+			//각 행마다 연속에서 k개의 0이나 1이 있는지를 확인을 해야됩니다.
+			//그걸 어떻게 할지를 생각해야겠죠..?
+		}
+		if (cont == true) {
+			contCnt++;
+		}
+		else {//한 줄이 안되면 그냥 넘어가기.
+			break;
+		}
+	}
+
+	return contCnt;
+}
+
+//고른 행을 무슨 값으로 할까?
+void dfs2(int myCnt, int cnt) {
+	if (myCnt == cnt) {
+		//바꾸기..
+		//해당 값으로 다 바꿔줍니다.
+		for (int i = 0; i < sel.size(); i++) {
+			for (int j = 0; j < w; j++) {
+				film2[sel[i]][j] = sel2[i];
+			}
+		}
+
+		int contCnt = continueCnt();
+		if (contCnt == w) {
+			answer = cnt;
+		}
+		
+		filmCopy();
+
+		return;
+	}
+
+	for (int i = 0; i <= 1; i++) {
+		sel2.push_back(i);
+		dfs2(myCnt + 1, cnt);
+		sel2.pop_back();
+	}
+}
+
+//행을 cnt 개 고른다.
+void dfs(int start, int myCnt, int cnt) {
+	if (myCnt == cnt) {
+		//다 골랐다.
+		dfs2(0, cnt);
+		return;
+	}
+
+	if (start >= d) {
+		return;
+	}
+
+	for (int i = start; i < d; i++) {
+		sel.push_back(i);
+		dfs(i + 1, myCnt + 1, cnt);
+		sel.pop_back();
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		cin >> d >> w >> k;
+		answer = 0;
+
+		for (int i = 0; i < d; i++) {
+			for (int j = 0; j < w; j++) {
+				cin >> film[i][j];
+				film2[i][j] = film[i][j];
+			}
+		}
+		//특성 A는 0이고 B는 1로 표시.
+
+		if (k == 1) {
+			cout << "#" << t << " " << answer << '\n';
+			continue;
+		}
+
+		//이걸 함수로 만드는 게 낫겠는데..
+		int contCnt = continueCnt();
+		if (contCnt == w) {
+			answer = 0;
+		}
+		else {
+			for (int a = 1; a <= d; a++) {
+				dfs(0, 0, a);//누구를 바꿀지를 선택하기.
+				if (answer == a) {
+					break;
+					//최소값을 찾는거라서.
+				}
+			}
+		}
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
