@@ -1,0 +1,135 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*
+2112. [모의 SW 역량테스트] 보호 필름
+불필요한 연산을 없앴다.
+dfs2를 없애서 dfs 내에서 0으로 뿌리는 경우와 1로 뿌리는 경우를 했고
+모든 행과 열을 바꾸는 게 아니라 선택한 행만 열 값을 바꾸도록 했다.
+
+이 문제를 통해서 좀 더 효율적으로 코딩하는 방법을 배울 수 있었다.
+*/
+
+int d, w, k;
+int film[13][20];
+int film2[13][20];//이게 근데 1로 바꾸냐 아니면 2로 바꾸냐도 생각을 해야 돼..
+int answer;
+
+void spread(int val, int idx) {
+	for (int i = 0; i < w; i++) {
+		film2[idx][i] = val;
+	}
+}
+
+void resetSpread(int idx) {
+	for (int i = 0; i < w; i++) {
+		film2[idx][i] = film[idx][i];
+	}
+}
+
+int continueCnt() {
+	int contCnt = 0;
+	for (int j = 0; j < w; j++) {
+		bool cont = false;
+		for (int i = 0; i <= d - k; i++) {
+			int val = film2[i][j];
+			bool check = true;
+			for (int l = 0; l < k; l++) {
+				if (val != film2[i + l][j]) {
+					check = false;
+					break;
+				}
+			}
+			if (check == true) {
+				cont = true;
+				break;
+			}
+			//각 행마다 연속에서 k개의 0이나 1이 있는지를 확인을 해야됩니다.
+			//그걸 어떻게 할지를 생각해야겠죠..?
+		}
+		if (cont == true) {
+			contCnt++;
+		}
+		else {//한 줄이 안되면 그냥 넘어가기.
+			break;
+		}
+	}
+
+	return contCnt;
+}
+
+//행을 cnt 개 고른다.
+void dfs(int start, int myCnt, int cnt) {
+	if (answer == cnt) {
+		return;//이미 다 돌았으면 볼 필요 없음.
+	}
+
+	if (myCnt == cnt) {
+		int contCnt = continueCnt();
+		if (contCnt == w) {
+			answer = cnt;
+		}
+
+		return;
+	}
+
+	if (start >= d) {
+		return;
+	}
+
+	for (int i = start; i < d; i++) {
+		spread(0, i);
+		dfs(i + 1, myCnt + 1, cnt);
+		resetSpread(i);
+
+		spread(1, i);
+		dfs(i + 1, myCnt + 1, cnt);
+		resetSpread(i);
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		cin >> d >> w >> k;
+		answer = 0;
+
+		for (int i = 0; i < d; i++) {
+			for (int j = 0; j < w; j++) {
+				cin >> film[i][j];
+				film2[i][j] = film[i][j];
+			}
+		}
+		//특성 A는 0이고 B는 1로 표시.
+
+		if (k == 1) {
+			cout << "#" << t << " " << answer << '\n';
+			continue;
+		}
+
+		//이걸 함수로 만드는 게 낫겠는데..
+		int contCnt = continueCnt();
+		if (contCnt == w) {
+			answer = 0;
+		}
+		else {
+			for (int a = 1; a <= d; a++) {
+				dfs(0, 0, a);//누구를 바꿀지를 선택하기.
+				if (answer == a) {
+					break;
+					//최소값을 찾는거라서.
+				}
+			}
+		}
+
+		cout << "#" << t << " " << answer << '\n';
+	}
+
+	return 0;
+}
