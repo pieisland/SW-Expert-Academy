@@ -1,0 +1,133 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*
+5648. [모의 SW 역량테스트] 원자 소멸 시뮬레이션
+시간초과나는데.. ㅋㅋ
+*/
+
+int n;
+double dir[4][2] = { {0.5, 0}, {-0.5, 0}, {0, -0.5}, {0, 0.5} };
+
+struct Atom {
+	double y;
+	double x;
+	int d;//방향
+	int k;//보유 에너지
+
+	//약간.. 기본 값으로 주어지면 되겠죠.?
+	bool live = true;
+
+}typedef atom;
+
+vector<atom> atoms;
+
+//모든 원자 위치 이동.
+void move() {
+	for (int i = 0; i < atoms.size(); i++) {
+		//죽은 애면 이동을 할 필요는 없기 때문임.
+		if (atoms[i].live == false) {
+			//cout << "뒤졌다" << endl;
+			continue;
+		}
+		//cout << atoms[i].y << " " << dir[atoms[i].d][0]<<endl;
+		//cout << atoms[i].x << " " << dir[atoms[i].d][1] << endl;
+
+		double ny = atoms[i].y + dir[atoms[i].d][0];
+		double nx = atoms[i].x + dir[atoms[i].d][1];
+
+		//cout <<i <<" "<< nx << " " << ny << endl;
+
+		atoms[i].y = ny;
+		atoms[i].x = nx;
+	}
+}
+
+void show() {
+	cout << "위치" << endl;
+	for (int i = 0; i < atoms.size(); i++)
+	{
+		cout << i << " " << atoms[i].x << " " << atoms[i].y << endl;
+	}
+}
+
+int collision() {
+	int ret = 0;
+
+	for (int i = 0; i < atoms.size(); i++) {
+		if (atoms[i].live == false) continue;//죽은 애는 건너뜀.
+
+		bool col = false;
+		for (int j = 0; j < atoms.size(); j++) {
+			if (i == j) continue;
+			//나 자신은 볼 필요가 없구요.
+
+			//얘도 죽은 애는 볼 필요 없어요.
+			if (atoms[j].live == false) continue;
+
+			if(atoms[i].y == atoms[j].y && atoms[i].x == atoms[j].x) {
+				//동일하다면
+				col = true;
+				//cout << i << "랑" << j << "가 왜 충ㄷㄹ이 됐ㄴㄴ데..?" << endl;
+
+				//atoms[i].live = false;
+				atoms[j].live = false;
+				//죽은 처리를 해 준후에
+
+				ret +=atoms[j].k;
+			}
+		}
+		if (col) {
+			atoms[i].live = false;
+			ret += atoms[i].k;
+		}
+	}
+
+	//이번 이동으로 충돌해서 방출된 에너지 리턴.
+	return ret;
+}
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		int k;
+		int y, x;
+		int d;
+		int answer = 0;
+		cin >> n;
+		atoms.clear();
+		for (int i = 0; i < n; i++) {
+			atom tmp;
+			cin >> x >> y >> d >> k;//위치와 보유에너지.
+			tmp.y = (double)y;
+			tmp.x = (double)x;
+			tmp.d = d;
+			tmp.k = k;
+			atoms.push_back(tmp);
+		}
+
+		//근데 아무리 그래도 그냥 2000번만 돌리면 되지 않을까 싶어서요.
+		//어디 끊어줄 수 있는 데가 있나..?
+		//살아 있는 애들의 위치가 어떻다 하는 그런 게 있어야 할텐데..
+		for(int i=0;i<4000;i++) {
+			move();
+			//show();
+			answer += collision();
+			//충돌하면 에너지 방출해야죠.
+		}
+		//하지만 시간초과 나겠찌;
+		cout << "#" << t << " " << answer << '\n';
+	}
+	//이게 근데 언제 끝나는지를 알 수가 없어서
+	//진짜 애매해요.
+	//문제 자체가 어려운 건 아닌데
+	//언제끝나는지를 어떻게 판단할거야..? 4000번 맥스로 잡으면 되나?
+
+	return 0;
+}
