@@ -1,0 +1,87 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <queue>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+
+/*
+20.06.12. 토
+8382. 방향전환
+아니.. 도대체 런타임 에러는 뭐냐구요...
+*/
+
+int pos[2][2];
+int check[400][400];
+int dir[2][2][2] = { {{1, 0}, {-1, 0}}, {{0, 1}, {0, -1}} };
+
+void checkClear() {
+	for (int i = 0; i < 400; i++)
+		for (int j = 0; j < 400; j++)
+			check[i][j] = 0;
+}
+
+int bfs(int idx) {
+	int y = pos[0][0];
+	int x = pos[0][1];
+	queue<pair<pair<int, int>, int>> q;
+	q.push({ { y, x }, idx });
+
+	check[y][x] = 1;
+	
+	while (!q.empty()) {
+		//cout << "안끝나..?" << '\n';
+		int cy = q.front().first.first;
+		int cx = q.front().first.second;
+		int myidx = q.front().second;
+		//if (myidx == 0) myidx = 1;
+		//else myidx = 0;//값을 바꿔줘야 하기 때문입니다.
+		q.pop();
+
+		if (cy == pos[1][0] && cx == pos[1][1]) {
+			return check[cy][cx] - 1;
+		}
+
+		for (int i = 0; i < 2; i++) {
+			int ny = cy + dir[myidx][i][0];
+			int nx = cx + dir[myidx][i][1];
+
+			if (check[ny][nx] == 0) {
+				if (myidx == 0) {
+					q.push({ {ny, nx}, 1 });
+				}
+				else
+					q.push({ { ny, nx }, 0 });
+				check[ny][nx] = check[cy][cx] + 1;
+			}
+		}
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tc;
+	cin >> tc;
+	for (int t = 1; t <= tc; t++) {
+		cin >> pos[0][0] >> pos[0][1] >> pos[1][0] >> pos[1][1];
+		pos[0][0] += 200;
+		pos[0][1] += 200;
+		pos[1][0] += 200;
+		pos[1][1] += 200;
+
+		int val = bfs(0);
+		checkClear();
+		int val2 = bfs(1);
+		checkClear();
+		int ans = val < val2 ? val : val2;
+
+		cout << "#" << t << " " << ans << '\n';
+	}
+
+	return 0;
+}
